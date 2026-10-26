@@ -1,0 +1,817 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BookEase - Staff Members</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@700;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --bg-color: #f8f9fc;
+            --sidebar-bg: #ffffff;
+            --text-main: #111827;
+            --text-muted: #6b7280;
+            --border-color: #e5e7eb;
+            --primary-blue: #2563eb;
+            --primary-blue-light: #eff6ff;
+            --primary-blue-hover: #1d4ed8;
+            --success-green: #10b981;
+            --success-green-light: #ecfdf5;
+            --warning-orange: #f59e0b;
+            --warning-orange-light: #fffbeb;
+            --danger-red: #ef4444;
+            --card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+            --input-border: #d1d5db;
+            --input-focus: #2563eb;
+            
+            /* Staff Avatar Colors */
+            --avatar-blue: #2563eb;
+            --avatar-green: #10b981;
+            --avatar-orange: #f59e0b;
+            --avatar-purple: #8b5cf6;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* --- Sidebar Styles --- */
+        .sidebar {
+            width: 260px;
+            background-color: var(--sidebar-bg);
+            border-right: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            padding: 24px 0;
+            flex-shrink: 0;
+        }
+
+        /* Updated Logo Styles */
+        .logo {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 0 24px 24px 24px;
+            border-bottom: 1px solid var(--border-color);
+            margin-bottom: 16px;
+            letter-spacing: -0.5px; 
+            font-weight: 800;
+            font-size: 28px; 
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .logo img {
+            max-width: 100%;
+            max-height: 45px; /* Adjusts the height of the logo */
+            object-fit: contain;
+        }
+        
+        /* "Book" */
+        .logo-text-dark {
+            color: #13274F; 
+        }
+
+        /* "Ease" */
+        .logo-text-light {
+            color: #0D82FF;
+        }
+
+        .nav-menu {
+            list-style: none;
+            padding: 0 16px;
+            flex-grow: 1;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            margin-bottom: 4px;
+            border-radius: 8px;
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+
+        .nav-item i {
+            width: 20px;
+            text-align: center;
+            font-size: 16px;
+        }
+
+        .nav-item:hover {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+        }
+
+        .nav-item.active {
+            background-color: var(--primary-blue-light);
+            color: var(--primary-blue);
+            font-weight: 600;
+        }
+
+        .sidebar-footer {
+            padding: 24px;
+            margin-top: auto;
+        }
+
+        .tagline-label {
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+        }
+
+        .tagline-text {
+            font-size: 13px;
+            color: var(--text-muted);
+            font-style: italic;
+            line-height: 1.4;
+        }
+
+        /* --- Main Content Styles --- */
+        .main-content {
+            flex-grow: 1;
+            padding: 32px 40px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        /* Header */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 16px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .header-titles h1 {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .header-titles p {
+            font-size: 14px;
+            color: var(--text-muted);
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+        }
+
+        .location {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            background-color: var(--success-green);
+            border-radius: 50%;
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .user-profile img {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        /* Toolbar */
+        .toolbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .toolbar-left {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            flex-grow: 1;
+        }
+
+        .search-box {
+            position: relative;
+            width: 320px;
+        }
+
+        .search-box i {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 10px 12px 10px 36px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 14px;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .search-box input:focus {
+            border-color: var(--primary-blue);
+        }
+
+        .filter-select {
+            padding: 10px 16px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 14px;
+            color: var(--text-main);
+            background-color: white;
+            outline: none;
+            cursor: pointer;
+            font-weight: 500;
+            appearance: none;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%236b7280' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 10px center;
+            background-size: 14px;
+            padding-right: 36px;
+        }
+
+        .btn-primary {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 20px;
+            background-color: var(--primary-blue);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            white-space: nowrap;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--primary-blue-hover);
+        }
+
+        /* Layout Grid */
+        .staff-layout {
+            display: grid;
+            grid-template-columns: 2.2fr 1fr;
+            gap: 24px;
+            align-items: start;
+        }
+
+        .card {
+            background-color: var(--sidebar-bg);
+            border-radius: 12px;
+            box-shadow: var(--card-shadow);
+            border: 1px solid var(--border-color);
+            padding: 24px;
+        }
+
+        .card-title {
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+
+        /* Staff List (Left Column) */
+        .staff-list-header {
+            display: grid;
+            grid-template-columns: 2.5fr 2fr 1.5fr 1fr;
+            gap: 16px;
+            padding: 0 12px 12px 12px;
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .staff-list {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .staff-row {
+            display: grid;
+            grid-template-columns: 2.5fr 2fr 1.5fr 1fr;
+            gap: 16px;
+            align-items: center;
+            padding: 16px 12px;
+            border-bottom: 1px solid var(--border-color);
+            transition: background-color 0.2s;
+        }
+
+        .staff-row:last-child {
+            border-bottom: none;
+        }
+
+        .staff-row:hover {
+            background-color: #f9fafb;
+        }
+
+        .staff-info-cell {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 14px;
+            flex-shrink: 0;
+        }
+
+        .avatar-blue { background-color: var(--avatar-blue); }
+        .avatar-green { background-color: var(--avatar-green); }
+        .avatar-orange { background-color: var(--avatar-orange); }
+        .avatar-purple { background-color: var(--avatar-purple); }
+
+        .staff-name-role {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .staff-name {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-main);
+        }
+
+        .staff-role {
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        .assigned-services {
+            font-size: 13px;
+            color: var(--text-muted);
+            line-height: 1.4;
+        }
+
+        .rating-cell {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-main);
+        }
+
+        .rating-cell span {
+            font-weight: 400;
+            color: var(--text-muted);
+            font-size: 12px;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 600;
+            text-align: center;
+        }
+
+        .status-active {
+            background-color: var(--success-green-light);
+            color: var(--success-green);
+        }
+
+        .status-leave {
+            background-color: var(--warning-orange-light);
+            color: var(--warning-orange);
+        }
+
+        /* Shift Form (Right Column) */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group > label {
+            display: block;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-muted);
+            margin-bottom: 8px;
+        }
+
+        .form-group select,
+        .form-group input {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid var(--input-border);
+            border-radius: 8px;
+            font-size: 14px;
+            color: var(--text-main);
+            outline: none;
+            transition: border-color 0.2s;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .form-group select:focus,
+        .form-group input:focus {
+            border-color: var(--input-focus);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        .day-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+
+        .day-row:last-child {
+            margin-bottom: 0;
+        }
+
+        .day-row input[type="checkbox"] {
+            width: 16px;
+            height: 16px;
+            accent-color: var(--primary-blue);
+            cursor: pointer;
+            flex-shrink: 0;
+        }
+
+        .day-row span {
+            font-size: 13px;
+            font-weight: 500;
+            width: 80px;
+            flex-shrink: 0;
+        }
+
+        .day-row input[type="text"] {
+            flex-grow: 1;
+            padding: 8px 12px;
+            font-size: 13px;
+            text-align: center;
+        }
+
+        .lunch-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .lunch-row input[type="text"] {
+            flex-grow: 1;
+            padding: 8px 12px;
+            font-size: 13px;
+            text-align: center;
+        }
+
+        .form-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+            margin-top: 24px;
+            padding-top: 16px;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .btn-reset {
+            padding: 10px 20px;
+            background-color: white;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .btn-reset:hover {
+            background-color: #f9fafb;
+        }
+
+        .btn-apply {
+            padding: 10px 20px;
+            background-color: var(--primary-blue);
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .btn-apply:hover {
+            background-color: var(--primary-blue-hover);
+        }
+
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .staff-layout {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            body { flex-direction: column; overflow: auto; }
+            .sidebar { width: 100%; height: auto; border-right: none; border-bottom: 1px solid var(--border-color); }
+            .nav-menu { display: flex; overflow-x: auto; padding-bottom: 10px; }
+            .nav-item { white-space: nowrap; }
+            .main-content { padding: 20px; }
+            .toolbar { flex-direction: column; align-items: stretch; }
+            .toolbar-left { flex-direction: column; align-items: stretch; }
+            .search-box { width: 100%; }
+            .header { flex-direction: column; align-items: flex-start; gap: 16px; }
+            .staff-list-header { display: none; }
+            .staff-row { 
+                grid-template-columns: 1fr; 
+                gap: 8px; 
+                padding: 16px 0;
+                border-bottom: 1px solid var(--border-color);
+            }
+            .assigned-services { font-size: 12px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="logo">
+            <img src="bookease_logo.png" alt="BookEase Logo" style="height: 40px;">
+            <div style="margin-left: 10px;">
+                <span class="logo-text-dark">Book</span><span class="logo-text-light">Ease</span>
+            </div>
+        </div>
+        
+        <ul class="nav-menu">
+            <li><a href="dashboard.html" class="nav-item"><i class="fa-solid fa-house"></i> Dashboard</a></li>
+            <li><a href="appointments.html" class="nav-item"><i class="fa-regular fa-calendar-check"></i> Appointments</a></li>
+            <li><a href="calendar.html" class="nav-item"><i class="fa-regular fa-calendar"></i> Calendar</a></li>
+            <li><a href="services.html" class="nav-item"><i class="fa-solid fa-list-check"></i> Services</a></li>
+            <li><a href="staff.html" class="nav-item active"><i class="fa-solid fa-user-group"></i> Staff</a></li>
+            <li><a href="customers.html" class="nav-item"><i class="fa-regular fa-user"></i> Customers</a></li>
+            <li><a href="reports.html" class="nav-item"><i class="fa-solid fa-chart-line"></i> Reports & Analytics</a></li>
+            <li><a href="business_profile.html" class="nav-item"><i class="fa-solid fa-gear"></i> Business Profile</a></li>
+        </ul>
+        <div class="sidebar-footer">
+            <div class="tagline-label">Tagline</div>
+            <div class="tagline-text">"One Platform, Customized for Your Business."</div>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        
+        <!-- Header -->
+        <header class="header">
+            <div class="header-titles">
+                <h1>Staff Members</h1>
+                <p>Manage your stylists, specialists, and coordinate their operational schedules.</p>
+            </div>
+            <div class="header-actions">
+                <div class="user-profile">
+                    <img src="https://i.pravatar.cc/150?u=aisha" alt="Aisha Rahman">
+                    Aisha Rahman
+                </div>
+            </div>
+        </header>
+
+        <!-- Toolbar -->
+        <section class="toolbar">
+            <div class="toolbar-left">
+                <div class="search-box">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <input type="text" placeholder="Search by name, role or email...">
+                </div>
+                <select class="filter-select">
+                    <option value="all">Role: All Roles</option>
+                    <option value="stylist">Stylist</option>
+                    <option value="specialist">Specialist</option>
+                    <option value="therapist">Therapist</option>
+                </select>
+            </div>
+            <button class="btn-primary">
+                <i class="fa-solid fa-plus"></i> Add Staff Member
+            </button>
+        </section>
+
+        <!-- Staff Layout -->
+        <section class="staff-layout">
+            
+            <!-- Left Column: Staff List -->
+            <div class="card">
+                <h2 class="card-title">Staff Members</h2>
+                
+                <div class="staff-list-header">
+                    <span>STAFF MEMBER</span>
+                    <span>ASSIGNED SERVICES</span>
+                    <span>RATING</span>
+                    <span>STATUS</span>
+                </div>
+
+                <div class="staff-list">
+                    
+                    <!-- Staff 1 -->
+                    <div class="staff-row">
+                        <div class="staff-info-cell">
+                            <div class="avatar avatar-blue">C</div>
+                            <div class="staff-name-role">
+                                <span class="staff-name">Chloe Lim</span>
+                                <span class="staff-role">Stylist (Hair)</span>
+                            </div>
+                        </div>
+                        <div class="assigned-services">Signature Haircut, Korean Perm</div>
+                        <div class="rating-cell">4.9 <span>(124 reviews)</span></div>
+                        <div class="status-badge status-active">Active</div>
+                    </div>
+
+                    <!-- Staff 2 -->
+                    <div class="staff-row">
+                        <div class="staff-info-cell">
+                            <div class="avatar avatar-green">A</div>
+                            <div class="staff-name-role">
+                                <span class="staff-name">Emily</span>
+                                <span class="staff-role">Specialist (Facial)</span>
+                            </div>
+                        </div>
+                        <div class="assigned-services">Deep Cleansing Facial, Hydration Treatment</div>
+                        <div class="rating-cell">4.8 <span>(98 reviews)</span></div>
+                        <div class="status-badge status-active">Active</div>
+                    </div>
+
+                    <!-- Staff 3 -->
+                    <div class="staff-row">
+                        <div class="staff-info-cell">
+                            <div class="avatar avatar-orange">S</div>
+                            <div class="staff-name-role">
+                                <span class="staff-name">Sarah Ibrahim</span>
+                                <span class="staff-role">Senior Stylist</span>
+                            </div>
+                        </div>
+                        <div class="assigned-services">Gentle Organic Dye, Scalp Therapy</div>
+                        <div class="rating-cell">5.0 <span>(210 reviews)</span></div>
+                        <div class="status-badge status-leave">On Leave</div>
+                    </div>
+
+                    <!-- Staff 4 -->
+                    <div class="staff-row">
+                        <div class="staff-info-cell">
+                            <div class="avatar avatar-purple">V</div>
+                            <div class="staff-name-role">
+                                <span class="staff-name">Vignesh Nair</span>
+                                <span class="staff-role">Therapist</span>
+                            </div>
+                        </div>
+                        <div class="assigned-services">Premium Scalp Therapy, Head Massage</div>
+                        <div class="rating-cell">4.7 <span>(88 reviews)</span></div>
+                        <div class="status-badge status-active">Active</div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- Right Column: Shift & Availability Settings -->
+            <div class="card">
+                <h2 class="card-title">Shift & Availability Settings</h2>
+                
+                <form class="shift-form" onsubmit="event.preventDefault(); alert('Shift updated successfully!');">
+                    
+                    <div class="form-group">
+                        <label>Staff Member</label>
+                        <select>
+                            <option value="chloe">Chloe Lim</option>
+                            <option value="amirul">Amirul Hakim</option>
+                            <option value="sarah">Sarah Ibrahim</option>
+                            <option value="vignesh">Vignesh Nair</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Working Days & Shift Hours</label>
+                        
+                        <div class="day-row">
+                            <input type="checkbox" checked>
+                            <span>Monday</span>
+                            <input type="text" value="09:00 AM - 06:00 PM">
+                        </div>
+                        <div class="day-row">
+                            <input type="checkbox" checked>
+                            <span>Tuesday</span>
+                            <input type="text" value="09:00 AM - 06:00 PM">
+                        </div>
+                        <div class="day-row">
+                            <input type="checkbox" checked>
+                            <span>Wednesday</span>
+                            <input type="text" value="09:00 AM - 06:00 PM">
+                        </div>
+                        <div class="day-row">
+                            <input type="checkbox" checked>
+                            <span>Thursday</span>
+                            <input type="text" value="09:00 AM - 06:00 PM">
+                        </div>
+                        <div class="day-row">
+                            <input type="checkbox" checked>
+                            <span>Friday</span>
+                            <input type="text" value="09:00 AM - 06:00 PM">
+                        </div>
+                        <div class="day-row">
+                            <input type="checkbox" checked>
+                            <span>Saturday</span>
+                            <input type="text" value="09:00 AM - 06:00 PM">
+                        </div>
+                        <div class="day-row">
+                            <input type="checkbox" checked>
+                            <span>Sunday</span>
+                            <input type="text" value="09:00 AM - 06:00 PM">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Lunch Break Lockout</label>
+                        <div class="lunch-row">
+                            <input type="text" value="01:00 PM">
+                            <span>-</span>
+                            <input type="text" value="02:00 PM">
+                        </div>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="button" class="btn-reset" onclick="this.form.reset();">Reset</button>
+                        <button type="submit" class="btn-apply">Apply Shift</button>
+                    </div>
+
+                </form>
+            </div>
+
+        </section>
+
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Simple interactivity for the form
+            const applyBtn = document.querySelector('.btn-apply');
+            if(applyBtn) {
+                applyBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    // In a real app, this would gather form data and send to backend
+                    alert('Shift settings applied successfully!');
+                });
+            }
+
+            // Handle "Add Staff Member" button click
+            const addBtn = document.querySelector('.btn-primary');
+            if(addBtn) {
+                addBtn.addEventListener('click', () => {
+                    alert('Opening modal to add a new staff member...');
+                });
+            }
+        });
+    </script>
+</body>
+</html>

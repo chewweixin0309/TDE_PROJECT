@@ -1,0 +1,870 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BookEase - Calendar</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@700;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --bg-color: #f8f9fc;
+            --sidebar-bg: #ffffff;
+            --text-main: #111827;
+            --text-muted: #6b7280;
+            --border-color: #e5e7eb;
+            --primary-blue: #2563eb;
+            --primary-blue-light: #eff6ff;
+            --primary-blue-hover: #1d4ed8;
+            --success-green: #10b981;
+            --success-green-light: #ecfdf5;
+            --warning-orange: #f59e0b;
+            --danger-red: #ef4444;
+            --card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+            
+            /* Calendar Event Colors */
+            --event-blue-bg: #e0f2fe;
+            --event-blue-text: #0284c7;
+            --event-green-bg: #dcfce7;
+            --event-green-text: #16a34a;
+            --event-purple-bg: #f3e8ff;
+            --event-purple-text: #9333ea;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* --- Sidebar Styles --- */
+        .sidebar {
+            width: 260px;
+            background-color: var(--sidebar-bg);
+            border-right: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            padding: 24px 0;
+            flex-shrink: 0;
+        }
+
+        /* Updated Logo Styles */
+        .logo {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 0 24px 24px 24px;
+            border-bottom: 1px solid var(--border-color);
+            margin-bottom: 16px;
+            letter-spacing: -0.5px; 
+            font-weight: 800;
+            font-size: 28px; 
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .logo img {
+            max-width: 100%;
+            max-height: 45px; /* Adjusts the height of the logo */
+            object-fit: contain;
+        }
+        
+        /* "Book" */
+        .logo-text-dark {
+            color: #13274F; 
+        }
+
+        /* "Ease" */
+        .logo-text-light {
+            color: #0D82FF;
+        }
+
+        .nav-menu {
+            list-style: none;
+            padding: 0 16px;
+            flex-grow: 1;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            margin-bottom: 4px;
+            border-radius: 8px;
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+
+        .nav-item i {
+            width: 20px;
+            text-align: center;
+            font-size: 16px;
+        }
+
+        .nav-item:hover {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+        }
+
+        .nav-item.active {
+            background-color: var(--primary-blue-light);
+            color: var(--primary-blue);
+            font-weight: 600;
+        }
+
+        .sidebar-footer {
+            padding: 24px;
+            margin-top: auto;
+        }
+
+        .tagline-label {
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+        }
+
+        .tagline-text {
+            font-size: 13px;
+            color: var(--text-muted);
+            font-style: italic;
+            line-height: 1.4;
+        }
+
+        /* --- Main Content Styles --- */
+        .main-content {
+            flex-grow: 1;
+            padding: 32px 40px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        /* Header */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 16px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .header-titles h1 {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .header-titles p {
+            font-size: 14px;
+            color: var(--text-muted);
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+        }
+
+        .location {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            background-color: var(--success-green);
+            border-radius: 50%;
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .user-profile img {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        /* Toolbar */
+        .toolbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .toolbar-left {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .toggle-group {
+            display: flex;
+            background-color: #f3f4f6;
+            border-radius: 8px;
+            padding: 4px;
+        }
+
+        .toggle-btn {
+            padding: 6px 16px;
+            border: none;
+            background: transparent;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .toggle-btn.active {
+            background-color: white;
+            color: var(--text-main);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            font-weight: 600;
+        }
+
+        .date-navigator {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .date-navigator i {
+            color: var(--text-muted);
+            cursor: pointer;
+            font-size: 12px;
+            padding: 6px;
+            border-radius: 50%;
+            transition: background 0.2s;
+        }
+
+        .date-navigator i:hover {
+            background-color: var(--border-color);
+        }
+
+        .btn-primary {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 20px;
+            background-color: var(--primary-blue);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--primary-blue-hover);
+        }
+
+        /* Layout Grid for Filters and Calendar */
+        .calendar-layout {
+            display: grid;
+            grid-template-columns: 240px 1fr;
+            gap: 24px;
+            align-items: start;
+        }
+
+        .card {
+            background-color: var(--sidebar-bg);
+            border-radius: 12px;
+            box-shadow: var(--card-shadow);
+            border: 1px solid var(--border-color);
+        }
+
+        /* Staff Filter Panel */
+        .staff-filter {
+            padding: 20px;
+        }
+
+        .filter-title {
+            font-size: 15px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .staff-list {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .staff-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+        }
+
+        .staff-color-box {
+            width: 16px;
+            height: 16px;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 10px;
+        }
+
+        .color-blue { background-color: #3b82f6; }
+        .color-green { background-color: #10b981; }
+        .color-gray { background-color: #9ca3af; }
+        .color-purple { background-color: #8b5cf6; }
+
+        .staff-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .staff-name {
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .staff-role {
+            font-size: 11px;
+            color: var(--text-muted);
+        }
+
+        .availability-section {
+            border-top: 1px solid var(--border-color);
+            padding-top: 20px;
+        }
+
+        .availability-title {
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            margin-bottom: 12px;
+            letter-spacing: 0.5px;
+        }
+
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 10px;
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+
+        .checkbox-item input[type="checkbox"] {
+            width: 16px;
+            height: 16px;
+            accent-color: var(--primary-blue);
+            cursor: pointer;
+        }
+
+        /* Calendar Grid */
+        .calendar-container {
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .calendar-header {
+            display: grid;
+            grid-template-columns: 70px repeat(7, 1fr);
+            border-bottom: 1px solid var(--border-color);
+            background-color: #fafafa;
+        }
+
+        .cal-header-cell {
+            padding: 12px 0;
+            text-align: center;
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--text-muted);
+            border-right: 1px solid var(--border-color);
+        }
+
+        .cal-header-cell:last-child {
+            border-right: none;
+        }
+
+        .cal-header-cell .day-name {
+            display: block;
+            text-transform: uppercase;
+            margin-bottom: 4px;
+        }
+
+        .cal-header-cell .day-date {
+            font-size: 13px;
+            color: var(--text-main);
+        }
+
+        .cal-header-cell.active {
+            background-color: var(--primary-blue-light);
+            color: var(--primary-blue);
+        }
+        
+        .cal-header-cell.active .day-date {
+            color: var(--primary-blue);
+        }
+
+        .calendar-body {
+            display: grid;
+            grid-template-columns: 70px repeat(7, 1fr);
+            position: relative;
+        }
+
+        .time-label {
+            grid-column: 1;
+            text-align: right;
+            padding-right: 12px;
+            font-size: 11px;
+            color: var(--text-muted);
+            border-right: 1px solid var(--border-color);
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: flex-end;
+            align-items: flex-start;
+            padding-top: 8px;
+            height: 60px;
+        }
+
+        .time-label:last-child {
+            border-bottom: none;
+        }
+
+        .day-column {
+            border-right: 1px solid var(--border-color);
+            border-bottom: 1px solid var(--border-color);
+            height: 60px;
+            position: relative;
+        }
+
+        .day-column:last-child {
+            border-right: none;
+        }
+
+        /* Special styling for Staff Lunch row */
+        .lunch-row {
+            grid-column: span 1;
+            background-color: #f9fafb;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            color: #9ca3af;
+            font-weight: 500;
+        }
+
+        /* Events */
+        .event {
+            position: absolute;
+            left: 2px;
+            right: 2px;
+            padding: 6px 8px;
+            border-radius: 6px;
+            font-size: 10px;
+            line-height: 1.3;
+            border-left: 3px solid;
+            z-index: 10;
+            cursor: pointer;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+        }
+
+        .event-blue {
+            background-color: var(--event-blue-bg);
+            border-left-color: var(--event-blue-text);
+            color: var(--event-blue-text);
+        }
+
+        .event-green {
+            background-color: var(--event-green-bg);
+            border-left-color: var(--event-green-text);
+            color: var(--event-green-text);
+        }
+
+        .event-purple {
+            background-color: var(--event-purple-bg);
+            border-left-color: var(--event-purple-text);
+            color: var(--event-purple-text);
+        }
+
+        .event-title {
+            font-weight: 600;
+            margin-bottom: 2px;
+        }
+
+        .event-staff {
+            opacity: 0.8;
+        }
+
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .calendar-layout {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            body { flex-direction: column; overflow: auto; }
+            .sidebar { width: 100%; height: auto; border-right: none; border-bottom: 1px solid var(--border-color); }
+            .nav-menu { display: flex; overflow-x: auto; padding-bottom: 10px; }
+            .nav-item { white-space: nowrap; }
+            .main-content { padding: 20px; }
+            .toolbar { flex-direction: column; align-items: stretch; }
+            .toolbar-left { flex-direction: column; align-items: stretch; }
+            .header { flex-direction: column; align-items: flex-start; gap: 16px; }
+            .calendar-container { overflow-x: auto; }
+            .calendar-header, .calendar-body { min-width: 800px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="logo">
+            <img src="bookease_logo.png" alt="BookEase Logo" style="height: 40px;">
+            <div style="margin-left: 10px;">
+                <span class="logo-text-dark">Book</span><span class="logo-text-light">Ease</span>
+            </div>
+        </div>
+        
+        <ul class="nav-menu">
+            <li><a href="dashboard.html" class="nav-item"><i class="fa-solid fa-house"></i> Dashboard</a></li>
+            <li><a href="appointments.html" class="nav-item"><i class="fa-regular fa-calendar-check"></i> Appointments</a></li>
+            <li><a href="calendar.html" class="nav-item active"><i class="fa-regular fa-calendar"></i> Calendar</a></li>
+            <li><a href="services.html" class="nav-item"><i class="fa-solid fa-list-check"></i> Services</a></li>
+            <li><a href="staff.html" class="nav-item"><i class="fa-solid fa-user-group"></i> Staff</a></li>
+            <li><a href="customers.html" class="nav-item"><i class="fa-regular fa-user"></i> Customers</a></li>
+            <li><a href="reports.html" class="nav-item"><i class="fa-solid fa-chart-line"></i> Reports & Analytics</a></li>
+            <li><a href="business_profile.html" class="nav-item"><i class="fa-solid fa-gear"></i> Business Profile</a></li>
+        </ul>
+        <div class="sidebar-footer">
+            <div class="tagline-label">Tagline</div>
+            <div class="tagline-text">"One Platform, Customized for Your Business."</div>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        
+        <!-- Header -->
+        <header class="header">
+            <div class="header-titles">
+                <h1>Calendar</h1>
+                <p>Real-time multi-staff scheduling view.</p>
+            </div>
+            <div class="header-actions">
+                <div class="user-profile">
+                    <img src="https://i.pravatar.cc/150?u=aisha" alt="Aisha Rahman">
+                    Aisha Rahman
+                </div>
+            </div>
+        </header>
+
+        <!-- Toolbar -->
+        <section class="toolbar">
+            <div class="toolbar-left">
+                <div class="toggle-group">
+                    <button class="toggle-btn">Day</button>
+                    <button class="toggle-btn active">Week</button>
+                    <button class="toggle-btn">Month</button>
+                </div>
+                <div class="date-navigator">
+                    <i class="fa-solid fa-chevron-left"></i>
+                    <span>14 Oct — 20 Oct 2024</span>
+                    <i class="fa-solid fa-chevron-right"></i>
+                </div>
+            </div>
+            <button class="btn-primary">
+                <i class="fa-solid fa-plus"></i> Add Booking
+            </button>
+        </section>
+
+        <!-- Calendar Layout -->
+        <section class="calendar-layout">
+            
+            <!-- Staff Filter Panel -->
+            <div class="card staff-filter">
+                <div class="filter-title">Staff Filter</div>
+                
+                <div class="staff-list">
+                    <label class="staff-item">
+                        <div class="staff-color-box color-blue"><i class="fa-solid fa-check"></i></div>
+                        <div class="staff-info">
+                            <span class="staff-name">Chloe Lim</span>
+                            <span class="staff-role">Stylist (Hair)</span>
+                        </div>
+                    </label>
+                    <label class="staff-item">
+                        <div class="staff-color-box color-green"><i class="fa-solid fa-check"></i></div>
+                        <div class="staff-info">
+                            <span class="staff-name">Amirul Hakim</span>
+                            <span class="staff-role">Specialist (Facial)</span>
+                        </div>
+                    </label>
+                    <label class="staff-item">
+                        <div class="staff-color-box color-gray"></div>
+                        <div class="staff-info">
+                            <span class="staff-name">Sarah Ibrahim</span>
+                            <span class="staff-role">Senior Stylist</span>
+                        </div>
+                    </label>
+                    <label class="staff-item">
+                        <div class="staff-color-box color-purple"><i class="fa-solid fa-check"></i></div>
+                        <div class="staff-info">
+                            <span class="staff-name">Vignesh Nair</span>
+                            <span class="staff-role">Therapist</span>
+                        </div>
+                    </label>
+                </div>
+
+                <div class="availability-section">
+                    <div class="availability-title">AVAILABILITY</div>
+                    <label class="checkbox-item">
+                        <input type="checkbox" checked>
+                        Available Working Hour
+                    </label>
+                    <label class="checkbox-item">
+                        <input type="checkbox">
+                        Blocked / Off Hours
+                    </label>
+                </div>
+            </div>
+
+            <!-- Calendar Container -->
+            <div class="card calendar-container">
+                <!-- Calendar Header -->
+                <div class="calendar-header">
+                    <div class="cal-header-cell"></div> <!-- Empty corner -->
+                    <div class="cal-header-cell">
+                        <span class="day-name">MON</span>
+                        <span class="day-date">14 Oct</span>
+                    </div>
+                    <div class="cal-header-cell active">
+                        <span class="day-name">TUE</span>
+                        <span class="day-date">15 Oct</span>
+                    </div>
+                    <div class="cal-header-cell">
+                        <span class="day-name">WED</span>
+                        <span class="day-date">16 Oct</span>
+                    </div>
+                    <div class="cal-header-cell">
+                        <span class="day-name">THU</span>
+                        <span class="day-date">17 Oct</span>
+                    </div>
+                    <div class="cal-header-cell">
+                        <span class="day-name">FRI</span>
+                        <span class="day-date">18 Oct</span>
+                    </div>
+                    <div class="cal-header-cell">
+                        <span class="day-name">SAT</span>
+                        <span class="day-date">19 Oct</span>
+                    </div>
+                    <div class="cal-header-cell">
+                        <span class="day-name">SUN</span>
+                        <span class="day-date">20 Oct</span>
+                    </div>
+                </div>
+
+                <!-- Calendar Body -->
+                <div class="calendar-body">
+                    
+                    <!-- Row 1: 09:00 AM -->
+                    <div class="time-label">09:00 AM</div>
+                    <div class="day-column"></div>
+                    <div class="day-column">
+                        <div class="event event-blue">
+                            <div class="event-title">Haircut: Farhan</div>
+                            <div class="event-staff">Staff: Chloe Lim</div>
+                        </div>
+                    </div>
+                    <div class="day-column"></div>
+                    <div class="day-column"></div>
+                    <div class="day-column"></div>
+                    <div class="day-column"></div>
+                    <div class="day-column"></div>
+
+                    <!-- Row 2: 10:00 AM -->
+                    <div class="time-label">10:00 AM</div>
+                    <div class="day-column"></div>
+                    <div class="day-column"></div>
+                    <div class="day-column"></div>
+                    <div class="day-column"></div>
+                    <div class="day-column"></div>
+                    <div class="day-column"></div>
+                    <div class="day-column"></div>
+
+                    <!-- Row 3: 11:00 AM -->
+                    <div class="time-label">11:00 AM</div>
+                    <div class="day-column"></div>
+                    <div class="day-column">
+                        <div class="event event-green">
+                            <div class="event-title">Facial: Siti A.</div>
+                            <div class="event-staff">Staff: Amirul H.</div>
+                        </div>
+                    </div>
+                    <div class="day-column"></div>
+                    <div class="day-column"></div>
+                    <div class="day-column"></div>
+                    <div class="day-column"></div>
+                    <div class="day-column"></div>
+
+                    <!-- Row 4: 12:00 PM -->
+                    <div class="time-label">12:00 PM</div>
+                    <div class="day-column"></div>
+                    <div class="day-column"></div>
+                    <div class="day-column"></div>
+                    <div class="day-column"></div>
+                    <div class="day-column"></div>
+                    <div class="day-column"></div>
+                    <div class="day-column"></div>
+
+                    <!-- Row 5: 01:00 PM (Staff Lunch) -->
+                    <div class="time-label">01:00 PM</div>
+                    <div class="day-column lunch-row">Staff Lunch</div>
+                    <div class="day-column lunch-row">Staff Lunch</div>
+                    <div class="day-column lunch-row">Staff Lunch</div>
+                    <div class="day-column lunch-row">Staff Lunch</div>
+                    <div class="day-column lunch-row">Staff Lunch</div>
+                    <div class="day-column lunch-row">Staff Lunch</div>
+                    <div class="day-column lunch-row">Staff Lunch</div>
+
+                    <!-- Row 6: 02:00 PM -->
+                    <div class="time-label">02:00 PM</div>
+                    <div class="day-column"></div>
+                    <div class="day-column"></div>
+                    <div class="day-column"></div>
+                    <div class="day-column">
+                        <div class="event event-purple">
+                            <div class="event-title">Scalp: Michelle</div>
+                            <div class="event-staff">Staff: Vignesh</div>
+                        </div>
+                    </div>
+                    <div class="day-column"></div>
+                    <div class="day-column"></div>
+                    <div class="day-column"></div>
+
+                    <!-- Row 7: 03:00 PM -->
+                    <div class="time-label">03:00 PM</div>
+                    <div class="day-column"></div>
+                    <div class="day-column"></div>
+                    <div class="day-column"></div>
+                    <div class="day-column"></div>
+                    <div class="day-column"></div>
+                    <div class="day-column"></div>
+                    <div class="day-column"></div>
+
+                    <!-- Row 8: 04:00 PM -->
+                    <div class="time-label">04:00 PM</div>
+                    <div class="day-column"></div>
+                    <div class="day-column"></div>
+                    <div class="day-column"></div>
+                    <div class="day-column"></div>
+                    <div class="day-column"></div>
+                    <div class="day-column"></div>
+                    <div class="day-column"></div>
+
+                    <!-- Row 9: 05:00 PM -->
+                    <div class="time-label">05:00 PM</div>
+                    <div class="day-column"></div>
+                    <div class="day-column"></div>
+                    <div class="day-column"></div>
+                    <div class="day-column"></div>
+                    <div class="day-column"></div>
+                    <div class="day-column"></div>
+                    <div class="day-column"></div>
+
+                </div>
+            </div>
+
+        </section>
+
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Handle toggle buttons (Day, Week, Month)
+            const toggleBtns = document.querySelectorAll('.toggle-btn');
+            
+            toggleBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    // Remove active class from all buttons
+                    toggleBtns.forEach(b => b.classList.remove('active'));
+                    // Add active class to clicked button
+                    btn.classList.add('active');
+                    
+                    // Note: In a real application, this would trigger a view change
+                    console.log(`Switched to ${btn.textContent} view`);
+                });
+            });
+
+            // Handle Date Navigation
+            const prevDate = document.querySelector('.fa-chevron-left');
+            const nextDate = document.querySelector('.fa-chevron-right');
+            const dateDisplay = document.querySelector('.date-navigator span');
+
+            if(prevDate && nextDate && dateDisplay) {
+                prevDate.addEventListener('click', () => {
+                    // Mock functionality for date change
+                    dateDisplay.textContent = "07 Oct — 13 Oct 2024";
+                });
+                nextDate.addEventListener('click', () => {
+                    // Mock functionality for date change
+                    dateDisplay.textContent = "21 Oct — 27 Oct 2024";
+                });
+            }
+
+            // Handle Staff Filter Checkboxes (Visual feedback only)
+            const staffItems = document.querySelectorAll('.staff-item');
+            staffItems.forEach(item => {
+                item.addEventListener('click', () => {
+                    const box = item.querySelector('.staff-color-box');
+                    // Toggle check icon
+                    if (box.innerHTML.trim() === '') {
+                        box.innerHTML = '<i class="fa-solid fa-check"></i>';
+                    } else {
+                        box.innerHTML = '';
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

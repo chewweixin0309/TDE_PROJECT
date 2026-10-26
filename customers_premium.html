@@ -1,0 +1,803 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BookEase - Customers Directory</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@700;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --bg-color: #f8f9fc;
+            --sidebar-bg: #ffffff;
+            --text-main: #111827;
+            --text-muted: #6b7280;
+            --border-color: #e5e7eb;
+            --primary-blue: #2563eb;
+            --primary-blue-light: #eff6ff;
+            --primary-blue-hover: #1d4ed8;
+            --success-green: #10b981;
+            --success-green-light: #ecfdf5;
+            --warning-orange: #f59e0b;
+            --warning-orange-light: #fffbeb;
+            --danger-red: #ef4444;
+            --card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+            --input-border: #d1d5db;
+            --input-focus: #2563eb;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* --- Sidebar Styles --- */
+        .sidebar {
+            width: 260px;
+            background-color: var(--sidebar-bg);
+            border-right: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            padding: 24px 0;
+            flex-shrink: 0;
+        }
+
+        /* Updated Logo Styles */
+        .logo {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 0 24px 24px 24px;
+            border-bottom: 1px solid var(--border-color);
+            margin-bottom: 16px;
+            letter-spacing: -0.5px; 
+            font-weight: 800;
+            font-size: 28px; 
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .logo img {
+            max-width: 100%;
+            max-height: 45px; /* Adjusts the height of the logo */
+            object-fit: contain;
+        }
+        
+        /* "Book" */
+        .logo-text-dark {
+            color: #13274F; 
+        }
+
+        /* "Ease" */
+        .logo-text-light {
+            color: #0D82FF;
+        }
+
+        .nav-menu {
+            list-style: none;
+            padding: 0 16px;
+            flex-grow: 1;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            margin-bottom: 4px;
+            border-radius: 8px;
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+
+        .nav-item i {
+            width: 20px;
+            text-align: center;
+            font-size: 16px;
+        }
+
+        .nav-item:hover {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+        }
+
+        .nav-item.active {
+            background-color: var(--primary-blue-light);
+            color: var(--primary-blue);
+            font-weight: 600;
+        }
+
+        .sidebar-footer {
+            padding: 24px;
+            margin-top: auto;
+        }
+
+        .tagline-label {
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+        }
+
+        .tagline-text {
+            font-size: 13px;
+            color: var(--text-muted);
+            font-style: italic;
+            line-height: 1.4;
+        }
+
+        /* --- Main Content Styles --- */
+        .main-content {
+            flex-grow: 1;
+            padding: 32px 40px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        /* Header */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 16px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .header-titles h1 {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .header-titles p {
+            font-size: 14px;
+            color: var(--text-muted);
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+        }
+
+        .location {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            background-color: var(--success-green);
+            border-radius: 50%;
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .user-profile img {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        /* Toolbar */
+        .toolbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .toolbar-left {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            flex-grow: 1;
+        }
+
+        .search-box {
+            position: relative;
+            width: 100%;
+            max-width: 400px;
+        }
+
+        .search-box i {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 12px 12px 12px 40px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 14px;
+            outline: none;
+            transition: border-color 0.2s;
+            background-color: white;
+        }
+
+        .search-box input:focus {
+            border-color: var(--primary-blue);
+        }
+
+        .btn-primary {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 20px;
+            background-color: var(--primary-blue);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            white-space: nowrap;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--primary-blue-hover);
+        }
+
+        /* Layout Grid */
+        .customers-layout {
+            display: grid;
+            grid-template-columns: 2.5fr 1.2fr;
+            gap: 24px;
+            align-items: start;
+        }
+
+        .card {
+            background-color: var(--sidebar-bg);
+            border-radius: 12px;
+            box-shadow: var(--card-shadow);
+            border: 1px solid var(--border-color);
+            padding: 24px;
+        }
+
+        /* Table Styles */
+        .table-responsive {
+            width: 100%;
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+        }
+
+        th {
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            padding: 16px 12px;
+            border-bottom: 1px solid var(--border-color);
+            letter-spacing: 0.5px;
+        }
+
+        td {
+            padding: 16px 12px;
+            font-size: 13px;
+            border-bottom: 1px solid var(--border-color);
+            vertical-align: middle;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        /* Selected Row Style */
+        tr.selected {
+            background-color: var(--primary-blue-light);
+        }
+
+        .customer-cell {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: #d1d5db;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 18px;
+            flex-shrink: 0;
+        }
+
+        .customer-name {
+            font-weight: 600;
+            color: var(--text-main);
+        }
+
+        .contact-details {
+            font-size: 12px;
+            color: var(--text-muted);
+            line-height: 1.4;
+        }
+
+        .contact-details span {
+            display: block;
+        }
+
+        .text-muted-sm {
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+
+        .text-bold-sm {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-main);
+        }
+
+        /* Details Panel */
+        .details-panel {
+            padding: 24px;
+            position: relative;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 24px;
+            right: 24px;
+            background: var(--bg-color);
+            border: none;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .close-btn:hover {
+            background: #e5e7eb;
+            color: var(--text-main);
+        }
+
+        .panel-title {
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 24px;
+        }
+
+        .customer-profile-header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 24px;
+            padding-bottom: 24px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .customer-profile-header .avatar {
+            width: 48px;
+            height: 48px;
+            background-color: #9ca3af;
+        }
+
+        .customer-info h3 {
+            font-size: 15px;
+            font-weight: 600;
+            margin-bottom: 2px;
+        }
+
+        .customer-info p {
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        .history-section-title {
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 16px;
+            color: var(--text-main);
+        }
+
+        .history-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+
+        .history-item {
+            background-color: #f8fafc;
+            border-radius: 8px;
+            padding: 12px 16px;
+            border: 1px solid #f1f5f9;
+        }
+
+        .history-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 6px;
+        }
+
+        .history-date {
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-transform: uppercase;
+        }
+
+        .history-status {
+            font-size: 11px;
+            font-weight: 600;
+            padding: 2px 8px;
+            border-radius: 12px;
+        }
+
+        .status-rescheduled {
+            background-color: var(--warning-orange-light);
+            color: var(--warning-orange);
+        }
+
+        .status-completed {
+            background-color: var(--success-green-light);
+            color: var(--success-green);
+        }
+
+        .history-service {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-main);
+            margin-bottom: 4px;
+        }
+
+        .history-meta {
+            font-size: 11px;
+            color: var(--text-muted);
+        }
+
+        .btn-block {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            background-color: white;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-main);
+            cursor: pointer;
+            text-align: center;
+            transition: background-color 0.2s;
+        }
+
+        .btn-block:hover {
+            background-color: #f9fafb;
+        }
+
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .customers-layout {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            body { flex-direction: column; overflow: auto; }
+            .sidebar { width: 100%; height: auto; border-right: none; border-bottom: 1px solid var(--border-color); }
+            .nav-menu { display: flex; overflow-x: auto; padding-bottom: 10px; }
+            .nav-item { white-space: nowrap; }
+            .main-content { padding: 20px; }
+            .toolbar { flex-direction: column; align-items: stretch; }
+            .search-box { max-width: 100%; }
+            .header { flex-direction: column; align-items: flex-start; gap: 16px; }
+            th, td { padding: 12px 8px; font-size: 12px; }
+            .contact-details { font-size: 11px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="logo">
+            <img src="bookease_logo.png" alt="BookEase Logo" style="height: 40px;">
+            <div style="margin-left: 10px;">
+                <span class="logo-text-dark">Book</span><span class="logo-text-light">Ease</span>
+            </div>
+        </div>
+        
+        <ul class="nav-menu">
+            <li><a href="dashboard.html" class="nav-item"><i class="fa-solid fa-house"></i> Dashboard</a></li>
+            <li><a href="appointments.html" class="nav-item"><i class="fa-regular fa-calendar-check"></i> Appointments</a></li>
+            <li><a href="calendar.html" class="nav-item"><i class="fa-regular fa-calendar"></i> Calendar</a></li>
+            <li><a href="services.html" class="nav-item"><i class="fa-solid fa-list-check"></i> Services</a></li>
+            <li><a href="staff.html" class="nav-item"><i class="fa-solid fa-user-group"></i> Staff</a></li>
+            <li><a href="customers.html" class="nav-item active"><i class="fa-regular fa-user"></i> Customers</a></li>
+            <li><a href="reports.html" class="nav-item"><i class="fa-solid fa-chart-line"></i> Reports & Analytics</a></li>
+            <li><a href="business_profile.html" class="nav-item"><i class="fa-solid fa-gear"></i> Business Profile</a></li>
+        </ul>
+        <div class="sidebar-footer">
+            <div class="tagline-label">Tagline</div>
+            <div class="tagline-text">"One Platform, Customized for Your Business."</div>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        
+        <!-- Header -->
+        <header class="header">
+            <div class="header-titles">
+                <h1>Customers Directory</h1>
+                <p>Access full treatment histories, customer records, and coordinate upcoming bookings.</p>
+            </div>
+            <div class="header-actions">
+                <div class="user-profile">
+                    <img src="https://i.pravatar.cc/150?u=aisha" alt="Aisha Rahman">
+                    Aisha Rahman
+                </div>
+            </div>
+        </header>
+
+        <!-- Toolbar -->
+        <section class="toolbar">
+            <div class="toolbar-left">
+                <div class="search-box">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <input type="text" placeholder="Search by customer name, phone or email...">
+                </div>
+            </div>
+            <button class="btn-primary">
+                <i class="fa-solid fa-plus"></i> New Customer Record
+            </button>
+        </section>
+
+        <!-- Customers Layout -->
+        <section class="customers-layout">
+            
+            <!-- Left Column: Customers Table -->
+            <div class="card" style="padding: 0;">
+                <div class="table-responsive">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th style="padding-left: 24px;">CUSTOMER</th>
+                                <th>CONTACT DETAILS</th>
+                                <th>VISITS</th>
+                                <th>TOTAL REVENUE</th>
+                                <th style="padding-right: 24px;">LAST VISIT</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Row 1 -->
+                            <tr>
+                                <td style="padding-left: 24px;">
+                                    <div class="customer-cell">
+                                        <div class="avatar"><i class="fa-solid fa-user"></i></div>
+                                        <span class="customer-name">Farhan Daniel</span>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="contact-details">
+                                        <span>+60 12-345 6789</span>
+                                        <span>farhan.d@gmail.com</span>
+                                    </div>
+                                </td>
+                                <td class="text-muted-sm">12 Visits</td>
+                                <td class="text-bold-sm">RM 1,020.00</td>
+                                <td style="padding-right: 24px;" class="text-muted-sm">Today</td>
+                            </tr>
+
+                            <!-- Row 2 -->
+                            <tr>
+                                <td style="padding-left: 24px;">
+                                    <div class="customer-cell">
+                                        <div class="avatar"><i class="fa-solid fa-user"></i></div>
+                                        <span class="customer-name">Siti Aminah</span>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="contact-details">
+                                        <span>+60 19-876 5432</span>
+                                        <span>siti.aminah@yahoo.com</span>
+                                    </div>
+                                </td>
+                                <td class="text-muted-sm">8 Visits</td>
+                                <td class="text-bold-sm">RM 1,440.00</td>
+                                <td style="padding-right: 24px;" class="text-muted-sm">Today</td>
+                            </tr>
+
+                            <!-- Row 3 (Selected) -->
+                            <tr class="selected">
+                                <td style="padding-left: 24px;">
+                                    <div class="customer-cell">
+                                        <div class="avatar"><i class="fa-solid fa-user"></i></div>
+                                        <span class="customer-name">Ariff Yusof</span>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="contact-details">
+                                        <span>+60 11-234 5678</span>
+                                        <span>ariff.yusof@gmail.com</span>
+                                    </div>
+                                </td>
+                                <td class="text-muted-sm">15 Visits</td>
+                                <td class="text-bold-sm">RM 3,210.00</td>
+                                <td style="padding-right: 24px;" class="text-muted-sm">15 Oct 2024</td>
+                            </tr>
+
+                            <!-- Row 4 -->
+                            <tr>
+                                <td style="padding-left: 24px;">
+                                    <div class="customer-cell">
+                                        <div class="avatar"><i class="fa-solid fa-user"></i></div>
+                                        <span class="customer-name">Michelle Wong</span>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="contact-details">
+                                        <span>+60 17-654 3210</span>
+                                        <span>michelle.wong@outlook.com</span>
+                                    </div>
+                                </td>
+                                <td class="text-muted-sm">22 Visits</td>
+                                <td class="text-bold-sm">RM 4,500.00</td>
+                                <td style="padding-right: 24px;" class="text-muted-sm">Starting soon</td>
+                            </tr>
+
+                            <!-- Row 5 -->
+                            <tr>
+                                <td style="padding-left: 24px;">
+                                    <div class="customer-cell">
+                                        <div class="avatar"><i class="fa-solid fa-user"></i></div>
+                                        <span class="customer-name">Tan Mei Ling</span>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="contact-details">
+                                        <span>+60 13-987 6543</span>
+                                        <span>meiling.tan@gmail.com</span>
+                                    </div>
+                                </td>
+                                <td class="text-muted-sm">4 Visits</td>
+                                <td class="text-bold-sm">RM 680.00</td>
+                                <td style="padding-right: 24px;" class="text-muted-sm">12 Oct 2024</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Right Column: Customer Details Panel -->
+            <div class="card details-panel">
+                <button class="close-btn"><i class="fa-solid fa-xmark"></i></button>
+                <h2 class="panel-title">Ariff Yusof Details</h2>
+                
+                <div class="customer-profile-header">
+                    <div class="avatar"><i class="fa-solid fa-user"></i></div>
+                    <div class="customer-info">
+                        <h3>Ariff Yusof</h3>
+                        <p>Customer ID: C-4091</p>
+                    </div>
+                </div>
+
+                <h3 class="history-section-title">Treatment & Booking History</h3>
+                
+                <div class="history-list">
+                    <!-- History Item 1 -->
+                    <div class="history-item">
+                        <div class="history-header">
+                            <span class="history-date">15 OCT 2024</span>
+                            <span class="history-status status-rescheduled">Rescheduled</span>
+                        </div>
+                        <div class="history-service">Korean Perm & Wave</div>
+                        <div class="history-meta">Staff: Chloe Lim • RM 320.00</div>
+                    </div>
+
+                    <!-- History Item 2 -->
+                    <div class="history-item">
+                        <div class="history-header">
+                            <span class="history-date">08 SEP 2024</span>
+                            <span class="history-status status-completed">Completed</span>
+                        </div>
+                        <div class="history-service">Signature Haircut + Wash</div>
+                        <div class="history-meta">Staff: Chloe Lim • RM 85.00</div>
+                    </div>
+
+                    <!-- History Item 3 -->
+                    <div class="history-item">
+                        <div class="history-header">
+                            <span class="history-date">14 AUG 2024</span>
+                            <span class="history-status status-completed">Completed</span>
+                        </div>
+                        <div class="history-service">Gentle Organic Dye</div>
+                        <div class="history-meta">Staff: Sarah Ibrahim • RM 240.00</div>
+                    </div>
+                </div>
+
+                <button class="btn-block">View All Activity</button>
+            </div>
+
+        </section>
+
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Handle table row selection
+            const tableRows = document.querySelectorAll('tbody tr');
+            
+            tableRows.forEach(row => {
+                row.addEventListener('click', () => {
+                    // Remove selected class from all rows
+                    tableRows.forEach(r => r.classList.remove('selected'));
+                    
+                    // Add selected class to clicked row
+                    row.classList.add('selected');
+
+                    // Mock updating the details panel based on selection
+                    // In a real app, this would fetch data and update the right panel
+                    const customerName = row.querySelector('.customer-name').textContent;
+                    const panelTitle = document.querySelector('.panel-title');
+                    if(panelTitle) {
+                        panelTitle.textContent = `${customerName} Details`;
+                    }
+                });
+            });
+
+            // Handle Close button on details panel
+            const closeBtn = document.querySelector('.close-btn');
+            const detailsPanel = document.querySelector('.details-panel');
+            const layoutGrid = document.querySelector('.customers-layout');
+            
+            if(closeBtn && detailsPanel) {
+                closeBtn.addEventListener('click', () => {
+                    detailsPanel.style.display = 'none';
+                    // Adjust grid layout when panel is closed
+                    layoutGrid.style.gridTemplateColumns = '1fr';
+                });
+            }
+        });
+    </script>
+</body>
+</html>

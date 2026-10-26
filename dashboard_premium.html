@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BookEase Dashboard</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --bg-color: #f8f9fc;
+            --sidebar-bg: #ffffff;
+            --text-main: #111827;
+            --text-muted: #6b7280;
+            --border-color: #e5e7eb;
+            --primary-blue: #2563eb;
+            --primary-blue-light: #eff6ff;
+            --success-green: #10b981;
+            --success-green-light: #ecfdf5;
+            --warning-orange: #f59e0b;
+            --warning-orange-light: #fffbeb;
+            --danger-red: #ef4444;
+            --card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* --- Sidebar Styles --- */
+        .sidebar {
+            width: 260px;
+            background-color: var(--sidebar-bg);
+            border-right: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            padding: 24px 0;
+            flex-shrink: 0;
+        }
+
+        /* Updated Logo Styles */
+        .logo {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 0 24px 24px 24px;
+            border-bottom: 1px solid var(--border-color);
+            margin-bottom: 16px;
+            letter-spacing: -0.5px; 
+            font-weight: 800;
+            font-size: 28px; 
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .logo img {
+            max-width: 100%;
+            max-height: 45px; /* Adjusts the height of the logo */
+            object-fit: contain;
+        }
+        
+        /* "Book" */
+        .logo-text-dark {
+            color: #13274F; 
+        }
+
+        /* "Ease" */
+        .logo-text-light {
+            color: #0D82FF;
+        }
+
+        .nav-menu {
+            list-style: none;
+            padding: 0 16px;
+            flex-grow: 1;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            margin-bottom: 4px;
+            border-radius: 8px;
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+
+        .nav-item i {
+            width: 20px;
+            text-align: center;
+            font-size: 16px;
+        }
+
+        .nav-item:hover {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+        }
+
+        .nav-item.active {
+            background-color: var(--primary-blue-light);
+            color: var(--primary-blue);
+            font-weight: 600;
+        }
+
+        .sidebar-footer {
+            padding: 24px;
+            margin-top: auto;
+        }
+
+        .tagline-label {
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+        }
+
+        .tagline-text {
+            font-size: 13px;
+            color: var(--text-muted);
+            font-style: italic;
+            line-height: 1.4;
+        }
+
+        /* --- Main Content Styles --- */
+        .main-content {
+            flex-grow: 1;
+            padding: 32px 40px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        /* Header */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 16px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .header-titles h1 {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .header-titles p {
+            font-size: 14px;
+            color: var(--text-muted);
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+        }
+
+        .location {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            background-color: var(--success-green);
+            border-radius: 50%;
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .user-profile img {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        /* Stats Cards */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+        }
+
+        .stat-card {
+            background-color: var(--sidebar-bg);
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: var(--card-shadow);
+            border: 1px solid var(--border-color);
+        }
+
+        .stat-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            margin-bottom: 12px;
+            letter-spacing: 0.5px;
+        }
+
+        .stat-header i {
+            font-size: 16px;
+            color: var(--primary-blue);
+            background: var(--primary-blue-light);
+            padding: 6px;
+            border-radius: 6px;
+        }
+
+        .stat-value {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .stat-trend {
+            font-size: 12px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .trend-up { color: var(--success-green); }
+        .trend-down { color: var(--danger-red); }
+        .stat-trend span { color: var(--text-muted); font-weight: 400;}
+
+        /* Bottom Section Grid */
+        .bottom-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 20px;
+        }
+
+        .card {
+            background-color: var(--sidebar-bg);
+            border-radius: 12px;
+            box-shadow: var(--card-shadow);
+            border: 1px solid var(--border-color);
+            padding: 20px;
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .card-title {
+            font-size: 16px;
+            font-weight: 700;
+        }
+
+        .card-link {
+            font-size: 13px;
+            color: var(--primary-blue);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .badge-new {
+            background-color: #fee2e2;
+            color: var(--danger-red);
+            font-size: 11px;
+            font-weight: 700;
+            padding: 4px 8px;
+            border-radius: 4px;
+            text-transform: uppercase;
+        }
+
+        /* Table Styles */
+        .table-responsive {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+        }
+
+        th {
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            padding: 12px 8px;
+            border-bottom: 1px solid var(--border-color);
+            letter-spacing: 0.5px;
+        }
+
+        td {
+            padding: 16px 8px;
+            font-size: 13px;
+            border-bottom: 1px solid var(--border-color);
+            vertical-align: middle;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        .customer-name {
+            font-weight: 600;
+        }
+
+        .service-text {
+            font-size: 12px;
+            color: var(--text-muted);
+            line-height: 1.3;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .status-completed {
+            background-color: var(--success-green-light);
+            color: var(--success-green);
+        }
+
+        .status-rescheduled {
+            background-color: var(--warning-orange-light);
+            color: var(--warning-orange);
+        }
+
+        .status-pending {
+            background-color: var(--primary-blue-light);
+            color: var(--primary-blue);
+        }
+
+        /* Notifications Styles */
+        .notifications-list {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .notification-item {
+            padding: 12px 16px;
+            border-radius: 8px;
+            background-color: #fafafa;
+            border-left: 4px solid transparent;
+        }
+
+        .notification-item.blue { border-left-color: var(--primary-blue); }
+        .notification-item.orange { border-left-color: var(--warning-orange); }
+        .notification-item.red { border-left-color: var(--danger-red); }
+
+        .notif-title {
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .notif-desc {
+            font-size: 12px;
+            color: var(--text-muted);
+            line-height: 1.4;
+            margin-bottom: 8px;
+        }
+
+        .notif-time {
+            font-size: 11px;
+            color: #9ca3af;
+        }
+
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .bottom-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            body {
+                flex-direction: column;
+                overflow: auto;
+            }
+            .sidebar {
+                width: 100%;
+                height: auto;
+                border-right: none;
+                border-bottom: 1px solid var(--border-color);
+            }
+            .nav-menu {
+                display: flex;
+                overflow-x: auto;
+                padding-bottom: 10px;
+            }
+            .nav-item {
+                white-space: nowrap;
+            }
+            .main-content {
+                padding: 20px;
+            }
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+            .header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 16px;
+            }
+        }
+
+        .notification-badge {
+            margin-left: auto; /* This pushes the badge to the far right */
+            background-color: #ef4444; /* Red color */
+            color: white;
+            font-size: 11px;
+            font-weight: 700;
+            padding: 2px 6px;
+            border-radius: 12px;
+            min-width: 18px;
+            text-align: center;
+            display: inline-block;
+            line-height: 1.2;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="logo">
+            <img src="bookease_logo.png" alt="BookEase Logo" style="height: 40px;">
+            <div style="margin-left: 10px;">
+                <span class="logo-text-dark">Book</span><span class="logo-text-light">Ease</span>
+            </div>
+        </div>
+        
+        <ul class="nav-menu">
+            <li><a href="dashboard.html" class="nav-item active"><i class="fa-solid fa-house"></i> Dashboard</a></li>
+            <li><a href="appointments.html" class="nav-item"><i class="fa-regular fa-calendar-check"></i> Appointments<span class="notification-badge" id="appointments-badge">1</span></a></li>
+            <li><a href="calendar.html" class="nav-item"><i class="fa-regular fa-calendar"></i> Calendar</a></li>
+            <li><a href="services.html" class="nav-item"><i class="fa-solid fa-list-check"></i> Services</a></li>
+            <li><a href="staff.html" class="nav-item"><i class="fa-solid fa-user-group"></i> Staff</a></li>
+            <li><a href="customers.html" class="nav-item"><i class="fa-regular fa-user"></i> Customers</a></li>
+            <li><a href="reports.html" class="nav-item"><i class="fa-solid fa-chart-line"></i> Reports & Analytics</a></li>
+            <li><a href="business-profile.html" class="nav-item"><i class="fa-solid fa-gear"></i> Business Profile</a></li>
+        </ul>
+        <div class="sidebar-footer">
+            <div class="tagline-label">Tagline</div>
+            <div class="tagline-text">"One Platform, Customized for Your Business."</div>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        
+        <!-- Header -->
+        <header class="header">
+            <div class="header-titles">
+                <h1>Dashboard</h1>
+                <p>Overview of your business operations today.</p>
+            </div>
+            <div class="header-actions">
+                <div class="user-profile">
+                    <img src="https://i.pravatar.cc/150?u=aisha" alt="Aisha Rahman">
+                    Aisha Rahman
+                </div>
+            </div>
+        </header>
+
+        <!-- Stats Cards -->
+        <section class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-header">
+                    Today's Appointments
+                    <i class="fa-regular fa-calendar"></i>
+                </div>
+                <div class="stat-value">24 Bookings</div>
+                <div class="stat-trend trend-up">
+                    <i class="fa-solid fa-arrow-trend-up"></i> +12% <span>vs last week</span>
+                </div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-header">
+                    Total Customers
+                    <i class="fa-regular fa-user"></i>
+                </div>
+                <div class="stat-value">1,420</div>
+                <div class="stat-trend trend-up">
+                    <i class="fa-solid fa-arrow-trend-up"></i> +4.3% <span>vs last week</span>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-header">
+                    Upcoming Bookings
+                    <i class="fa-regular fa-calendar"></i>
+                </div>
+                <div class="stat-value">68 Scheduled</div>
+                <div class="stat-trend trend-down">
+                    <i class="fa-solid fa-arrow-trend-down"></i> -2.1% <span>vs last week</span>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-header">
+                    Revenue (Month-to-Date)
+                    <i class="fa-solid fa-arrow-trend-up"></i>
+                </div>
+                <div class="stat-value">RM 18,240</div>
+                <div class="stat-trend trend-up">
+                    <i class="fa-solid fa-arrow-trend-up"></i> +18.4% <span>vs last week</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Bottom Section -->
+        <section class="bottom-grid">
+            
+            <!-- Today's Appointment Schedule -->
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">Today's Appointment Schedule</h2>
+                    <a href="#" class="card-link" id="viewAllLink">View All Appointments <i class="fa-solid fa-arrow-right"></i></a>
+                </div>
+                <div class="table-responsive">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>TIME</th>
+                                <th>CUSTOMER</th>
+                                <th>SERVICE</th>
+                                <th>STAFF</th>
+                                <th>PRICE</th>
+                                <th>STATUS</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>09:30 AM</td>
+                                <td class="customer-name">Farhan Daniel</td>
+                                <td class="service-text">Signature Haircut + Wash</td>
+                                <td>Chloe Lim</td>
+                                <td>RM 85.00</td>
+                                <td><span class="status-badge status-completed">Completed</span></td>
+                            </tr>
+                            <tr>
+                                <td>11:00 AM</td>
+                                <td class="customer-name">Siti Aminah</td>
+                                <td class="service-text">Deep Cleansing Facial</td>
+                                <td>Amirul Hakim</td>
+                                <td>RM 180.00</td>
+                                <td><span class="status-badge status-completed">Completed</span></td>
+                            </tr>
+                            <tr>
+                                <td>02:15 PM</td>
+                                <td class="customer-name">Ariff Yusof</td>
+                                <td class="service-text">Korean Perm & Wave</td>
+                                <td>Chloe Lim</td>
+                                <td>RM 320.00</td>
+                                <td><span class="status-badge status-rescheduled">Rescheduled</span></td>
+                            </tr>
+                            <tr>
+                                <td>03:30 PM</td>
+                                <td class="customer-name">Michelle Wong</td>
+                                <td class="service-text">Premium Scalp Therapy</td>
+                                <td>Vignesh Nair</td>
+                                <td>RM 210.00</td>
+                                <td><span class="status-badge status-pending">Pending</span></td>
+                            </tr>
+                            <tr>
+                                <td>05:00 PM</td>
+                                <td class="customer-name">Kumar Subramaniam</td>
+                                <td class="service-text">Beard Trim & Grooming</td>
+                                <td>Amirul Hakim</td>
+                                <td>RM 60.00</td>
+                                <td><span class="status-badge status-pending">Pending</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Live Notifications -->
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">Live Notifications</h2>
+                    <span class="badge-new">3 NEW</span>
+                </div>
+                <div class="notifications-list">
+                    
+                    <div class="notification-item blue">
+                        <div class="notif-title">New Booking Request</div>
+                        <div class="notif-desc">Michelle Wong booked Premium Scalp Therapy for today at 3:30 PM</div>
+                        <div class="notif-time">10 mins ago</div>
+                    </div>
+
+                    <div class="notification-item orange">
+                        <div class="notif-title">Appointment Reminder</div>
+                        <div class="notif-desc">Siti Aminah's Deep Cleansing Facial is starting in 15 mins</div>
+                        <div class="notif-time">15 mins ago</div>
+                    </div>
+
+                    <div class="notification-item red">
+                        <div class="notif-title">Booking Cancelled</div>
+                        <div class="notif-desc">Sarah Tan cancelled her Organic Hair Spa appointment (3:00 PM)</div>
+                        <div class="notif-time">1 hr ago</div>
+                    </div>
+
+                </div>
+            </div>
+
+        </section>
+
+    </main>
+
+    <script>
+        // Simple JavaScript to handle basic interactivity and dynamic elements
+        document.addEventListener('DOMContentLoaded', () => {
+            
+            // Add click event to "View All Appointments" link
+            const viewAllLink = document.getElementById('viewAllLink');
+            viewAllLink.addEventListener('click', (e) => {
+                e.preventDefault();
+                alert('Navigating to full appointments list...');
+                // In a real application, this would route to the Appointments page.
+            });
+
+            // Add hover effect logic via JS to the stat cards (optional enhancement)
+            const statCards = document.querySelectorAll('.stat-card');
+            statCards.forEach(card => {
+                card.addEventListener('mouseenter', () => {
+                    card.style.transform = 'translateY(-2px)';
+                    card.style.transition = 'transform 0.2s ease';
+                });
+                card.addEventListener('mouseleave', () => {
+                    card.style.transform = 'translateY(0)';
+                });
+            });
+
+            console.log('BookEase Dashboard loaded successfully.');
+        });
+
+        // Function to simulate a new appointment being made
+        function simulateNewAppointment() {
+            const badge = document.getElementById('appointments-badge');
+            if (badge) {
+                // Make the badge visible
+                badge.style.display = 'inline-block';
+                
+                // Increment the number inside the badge
+                let currentCount = parseInt(badge.textContent) || 0;
+                badge.textContent = currentCount + 1;
+                
+                console.log("New appointment notification added!");
+            }
+        }
+
+        // Example: Call this function after 3 seconds to simulate a customer booking
+        // Remove this timeout in your real application and call it when your backend confirms a booking
+        setTimeout(simulateNewAppointment, 3000);
+    </script>
+</body>
+</html>

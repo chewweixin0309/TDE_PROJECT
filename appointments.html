@@ -1,0 +1,789 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BookEase - Appointments</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@700;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --bg-color: #f8f9fc;
+            --sidebar-bg: #ffffff;
+            --text-main: #111827;
+            --text-muted: #6b7280;
+            --border-color: #e5e7eb;
+            --primary-blue: #2563eb;
+            --primary-blue-light: #eff6ff;
+            --primary-blue-hover: #1d4ed8;
+            --success-green: #10b981;
+            --success-green-light: #ecfdf5;
+            --warning-orange: #f59e0b;
+            --warning-orange-light: #fffbeb;
+            --danger-red: #ef4444;
+            --danger-red-light: #fef2f2;
+            --card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* --- Sidebar Styles --- */
+        .sidebar {
+            width: 260px;
+            background-color: var(--sidebar-bg);
+            border-right: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            padding: 24px 0;
+            flex-shrink: 0;
+        }
+
+        /* Updated Logo Styles */
+        .logo {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 0 24px 24px 24px;
+            border-bottom: 1px solid var(--border-color);
+            margin-bottom: 16px;
+            letter-spacing: -0.5px; 
+            font-weight: 800;
+            font-size: 28px; 
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .logo img {
+            max-width: 100%;
+            max-height: 45px; /* Adjusts the height of the logo */
+            object-fit: contain;
+        }
+        
+        /* "Book" */
+        .logo-text-dark {
+            color: #13274F; 
+        }
+
+        /* "Ease" */
+        .logo-text-light {
+            color: #0D82FF;
+        }
+
+        .nav-menu {
+            list-style: none;
+            padding: 0 16px;
+            flex-grow: 1;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            margin-bottom: 4px;
+            border-radius: 8px;
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+
+        .nav-item i {
+            width: 20px;
+            text-align: center;
+            font-size: 16px;
+        }
+
+        .nav-item:hover {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+        }
+
+        .nav-item.active {
+            background-color: var(--primary-blue-light);
+            color: var(--primary-blue);
+            font-weight: 600;
+        }
+
+        .sidebar-footer {
+            padding: 24px;
+            margin-top: auto;
+        }
+
+        .tagline-label {
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+        }
+
+        .tagline-text {
+            font-size: 13px;
+            color: var(--text-muted);
+            font-style: italic;
+            line-height: 1.4;
+        }
+
+        /* --- Main Content Styles --- */
+        .main-content {
+            flex-grow: 1;
+            padding: 32px 40px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        /* Header */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 16px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .header-titles h1 {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .header-titles p {
+            font-size: 14px;
+            color: var(--text-muted);
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+        }
+
+        .location {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            background-color: var(--success-green);
+            border-radius: 50%;
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .user-profile img {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        /* Toolbar / Filters */
+        .toolbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .toolbar-left {
+            display: flex;
+            gap: 12px;
+            flex-grow: 1;
+        }
+
+        .search-box {
+            position: relative;
+            width: 300px;
+        }
+
+        .search-box i {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 10px 12px 10px 36px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 14px;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .search-box input:focus {
+            border-color: var(--primary-blue);
+        }
+
+        .filter-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 16px;
+            background-color: white;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text-main);
+            cursor: pointer;
+        }
+
+        .btn-primary {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 20px;
+            background-color: var(--primary-blue);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--primary-blue-hover);
+        }
+
+        /* Layout Grid for Table and Details */
+        .content-layout {
+            display: grid;
+            grid-template-columns: 2.5fr 1fr;
+            gap: 24px;
+            align-items: start;
+        }
+
+        .card {
+            background-color: var(--sidebar-bg);
+            border-radius: 12px;
+            box-shadow: var(--card-shadow);
+            border: 1px solid var(--border-color);
+            overflow: hidden;
+        }
+
+        /* Table Styles */
+        .table-responsive {
+            width: 100%;
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+        }
+
+        th {
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            padding: 16px;
+            border-bottom: 1px solid var(--border-color);
+            letter-spacing: 0.5px;
+        }
+
+        td {
+            padding: 16px;
+            font-size: 13px;
+            border-bottom: 1px solid var(--border-color);
+            vertical-align: middle;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+        
+        /* Selected Row Style */
+        tr.selected {
+            background-color: var(--primary-blue-light);
+        }
+
+        input[type="checkbox"] {
+            width: 16px;
+            height: 16px;
+            accent-color: var(--primary-blue);
+            cursor: pointer;
+        }
+
+        .id-col {
+            font-weight: 600;
+            color: var(--text-main);
+        }
+
+        .customer-name, .staff-name {
+            font-weight: 600;
+        }
+
+        .service-text {
+            font-size: 12px;
+            color: var(--text-muted);
+            line-height: 1.3;
+        }
+
+        .price-col {
+            font-weight: 500;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 600;
+            text-align: center;
+        }
+
+        .status-pending { background-color: var(--primary-blue-light); color: var(--primary-blue); }
+        .status-completed { background-color: var(--success-green-light); color: var(--success-green); }
+        .status-rescheduled { background-color: var(--warning-orange-light); color: var(--warning-orange); }
+        .status-cancelled { background-color: var(--danger-red-light); color: var(--danger-red); }
+
+        /* Booking Details Panel */
+        .details-panel {
+            padding: 24px;
+            position: relative;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 24px;
+            right: 24px;
+            background: var(--bg-color);
+            border: none;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-muted);
+            cursor: pointer;
+        }
+
+        .panel-title {
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 24px;
+        }
+
+        .customer-profile {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .customer-profile img {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .customer-info h3 {
+            font-size: 15px;
+            font-weight: 600;
+            margin-bottom: 2px;
+        }
+
+        .customer-info p {
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        .detail-list {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            margin-bottom: 32px;
+        }
+
+        .detail-item {
+            display: flex;
+            justify-content: space-between;
+            font-size: 13px;
+        }
+
+        .detail-label {
+            color: var(--text-muted);
+        }
+
+        .detail-value {
+            font-weight: 500;
+            text-align: right;
+        }
+        
+        .text-blue { color: var(--primary-blue); font-weight: 600; }
+
+        .panel-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .btn-success {
+            background-color: var(--success-green);
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+        }
+
+        .action-row {
+            display: flex;
+            gap: 12px;
+        }
+
+        .btn-outline {
+            flex: 1;
+            padding: 10px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            background: white;
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+        }
+
+        .btn-outline-danger {
+            flex: 1;
+            padding: 10px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            background: white;
+            border: 1px solid var(--danger-red);
+            color: var(--danger-red);
+        }
+
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .content-layout {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            body { flex-direction: column; overflow: auto; }
+            .sidebar { width: 100%; height: auto; border-right: none; border-bottom: 1px solid var(--border-color); }
+            .nav-menu { display: flex; overflow-x: auto; padding-bottom: 10px; }
+            .nav-item { white-space: nowrap; }
+            .main-content { padding: 20px; }
+            .toolbar { flex-direction: column; align-items: stretch; }
+            .search-box { width: 100%; }
+            .header { flex-direction: column; align-items: flex-start; gap: 16px; }
+        }
+        
+        .notification-badge {
+            margin-left: auto; /* This pushes the badge to the far right */
+            background-color: #ef4444; /* Red color */
+            color: white;
+            font-size: 11px;
+            font-weight: 700;
+            padding: 2px 6px;
+            border-radius: 12px;
+            min-width: 18px;
+            text-align: center;
+            display: inline-block;
+            line-height: 1.2;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="logo">
+            <img src="bookease_logo.png" alt="BookEase Logo" style="height: 40px;">
+            <div style="margin-left: 10px;">
+                <span class="logo-text-dark">Book</span><span class="logo-text-light">Ease</span>
+            </div>
+        </div>
+        
+        <ul class="nav-menu">
+            <li><a href="dashboard.html" class="nav-item"><i class="fa-solid fa-house"></i> Dashboard</a></li>
+            <li><a href="appointments.html" class="nav-item active"><i class="fa-regular fa-calendar-check"></i> Appointments<span class="notification-badge" id="appointments-badge">1</span></a></li>
+            <li><a href="calendar.html" class="nav-item"><i class="fa-regular fa-calendar"></i> Calendar</a></li>
+            <li><a href="services.html" class="nav-item"><i class="fa-solid fa-list-check"></i> Services</a></li>
+            <li><a href="staff.html" class="nav-item"><i class="fa-solid fa-user-group"></i> Staff</a></li>
+            <li><a href="customers.html" class="nav-item"><i class="fa-regular fa-user"></i> Customers</a></li>
+            <li><a href="reports.html" class="nav-item"><i class="fa-solid fa-chart-line"></i> Reports & Analytics</a></li>
+            <li><a href="business_profile.html" class="nav-item"><i class="fa-solid fa-gear"></i> Business Profile</a></li>
+        </ul>
+        <div class="sidebar-footer">
+            <div class="tagline-label">Tagline</div>
+            <div class="tagline-text">"One Platform, Customized for Your Business."</div>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        
+        <!-- Header -->
+        <header class="header">
+            <div class="header-titles">
+                <h1>Appointments</h1>
+                <p>Manage bookings, reschedule sessions, and adjust status.</p>
+            </div>
+            <div class="header-actions">
+                <div class="user-profile">
+                    <img src="https://i.pravatar.cc/150?u=aisha" alt="Aisha Rahman">
+                    Aisha Rahman
+                </div>
+            </div>
+        </header>
+
+        <!-- Toolbar -->
+        <section class="toolbar">
+            <div class="toolbar-left">
+                <div class="search-box">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <input type="text" placeholder="Search Customer, ID or Staff...">
+                </div>
+                <button class="filter-btn">
+                    <i class="fa-solid fa-border-all"></i> Status: All
+                </button>
+                <button class="filter-btn">
+                    <i class="fa-solid fa-users"></i> All Staff
+                </button>
+            </div>
+            <button class="btn-primary">
+                <i class="fa-solid fa-plus"></i> New Appointment
+            </button>
+        </section>
+
+        <!-- Content Layout -->
+        <section class="content-layout">
+            
+            <!-- Table Card -->
+            <div class="card">
+                <div class="table-responsive">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th style="width: 40px;"><input type="checkbox"></th>
+                                <th>ID</th>
+                                <th>CUSTOMER</th>
+                                <th>SERVICE</th>
+                                <th>STAFF</th>
+                                <th>PRICE</th>
+                                <th>STATUS</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Selected Row -->
+                            <tr class="selected">
+                                <td><input type="checkbox" checked></td>
+                                <td class="id-col">A-2401</td>
+                                <td class="customer-name">Ariff Yusof</td>
+                                <td class="service-text">Korean Perm &<br>Wave</td>
+                                <td class="staff-name">Chloe Lim</td>
+                                <td class="price-col">RM 320.00</td>
+                                <td><span class="status-badge status-pending">Pending</span></td>
+                            </tr>
+                            <tr>
+                                <td><input type="checkbox"></td>
+                                <td class="id-col">A-2402</td>
+                                <td class="customer-name">Farhan<br>Daniel</td>
+                                <td class="service-text">Signature<br>Haircut + Wash</td>
+                                <td class="staff-name">Chloe Lim</td>
+                                <td class="price-col">RM 85.00</td>
+                                <td><span class="status-badge status-completed">Completed</span></td>
+                            </tr>
+                            <tr>
+                                <td><input type="checkbox"></td>
+                                <td class="id-col">A-2403</td>
+                                <td class="customer-name">Siti<br>Aminah</td>
+                                <td class="service-text">Deep<br>Cleansing<br>Facial</td>
+                                <td class="staff-name">Amirul Hakim</td>
+                                <td class="price-col">RM 180.00</td>
+                                <td><span class="status-badge status-completed">Completed</span></td>
+                            </tr>
+                            <tr>
+                                <td><input type="checkbox"></td>
+                                <td class="id-col">A-2404</td>
+                                <td class="customer-name">Tan Mei<br>Ling</td>
+                                <td class="service-text">Deep<br>Cleansing<br>Facial</td>
+                                <td class="staff-name">Sarah Ibrahim</td>
+                                <td class="price-col">RM 240.00</td>
+                                <td><span class="status-badge status-rescheduled">Rescheduled</span></td>
+                            </tr>
+                            <tr>
+                                <td><input type="checkbox"></td>
+                                <td class="id-col">A-2405</td>
+                                <td class="customer-name">Kavitha<br>Raj</td>
+                                <td class="service-text">Korean Perm &<br>Wave</td>
+                                <td class="staff-name">Vignesh Nair</td>
+                                <td class="price-col">RM 150.00</td>
+                                <td><span class="status-badge status-cancelled">Cancelled</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Booking Details Panel -->
+            <div class="card details-panel">
+                <button class="close-btn"><i class="fa-solid fa-xmark"></i></button>
+                <h2 class="panel-title">Booking Details</h2>
+                
+                <div class="customer-profile">
+                    <!-- Placeholder avatar matching the image style -->
+                    <img src="https://i.pravatar.cc/150?u=ariff" alt="Ariff Yusof">
+                    <div class="customer-info">
+                        <h3>Ariff Yusof</h3>
+                        <p>ID: A-2401</p>
+                    </div>
+                </div>
+
+                <div class="detail-list">
+                    <div class="detail-item">
+                        <span class="detail-label">Service</span>
+                        <span class="detail-value">Korean Perm & Wave</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Staff assigned</span>
+                        <span class="detail-value">Chloe Lim</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Price</span>
+                        <span class="detail-value text-blue">RM 320.00</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Scheduled Date</span>
+                        <span class="detail-value">15 Oct 2024</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Time Slot</span>
+                        <span class="detail-value">02:15 PM - 04:15 PM</span>
+                    </div>
+                </div>
+
+                <div class="panel-actions">
+                    <button class="btn-success">Mark Completed</button>
+                    <div class="action-row">
+                        <button class="btn-outline">Reschedule</button>
+                        <button class="btn-outline-danger">Cancel Booking</button>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Handle table row selection
+            const tableRows = document.querySelectorAll('tbody tr');
+            
+            tableRows.forEach(row => {
+                // Find the checkbox inside this row
+                const checkbox = row.querySelector('input[type="checkbox"]');
+                
+                row.addEventListener('click', (e) => {
+                    // Don't trigger if clicking directly on the checkbox (let default behavior happen)
+                    if(e.target.tagName === 'INPUT') return; 
+                    
+                    // Uncheck all other checkboxes and remove selected class
+                    tableRows.forEach(r => {
+                        r.classList.remove('selected');
+                        r.querySelector('input[type="checkbox"]').checked = false;
+                    });
+                    
+                    // Select the clicked row
+                    row.classList.add('selected');
+                    checkbox.checked = true;
+                });
+
+                // Handle checkbox changes directly
+                checkbox.addEventListener('change', (e) => {
+                    if(e.target.checked) {
+                        tableRows.forEach(r => {
+                            r.classList.remove('selected');
+                            r.querySelector('input[type="checkbox"]').checked = false;
+                        });
+                        row.classList.add('selected');
+                    } else {
+                        row.classList.remove('selected');
+                    }
+                });
+            });
+
+            // Handle Close button on details panel (Optional interaction)
+            const closeBtn = document.querySelector('.close-btn');
+            const detailsPanel = document.querySelector('.details-panel');
+            
+            if(closeBtn && detailsPanel) {
+                closeBtn.addEventListener('click', () => {
+                    detailsPanel.style.display = 'none';
+                    // Adjust grid layout when panel is closed (optional)
+                    document.querySelector('.content-layout').style.gridTemplateColumns = '1fr';
+                });
+            }
+        });
+
+        // Function to simulate a new appointment being made
+        function simulateNewAppointment() {
+            const badge = document.getElementById('appointments-badge');
+            if (badge) {
+                // Make the badge visible
+                badge.style.display = 'inline-block';
+                
+                // Increment the number inside the badge
+                let currentCount = parseInt(badge.textContent) || 0;
+                badge.textContent = currentCount + 1;
+                
+                console.log("New appointment notification added!");
+            }
+        }
+
+        // Example: Call this function after 3 seconds to simulate a customer booking
+        // Remove this timeout in your real application and call it when your backend confirms a booking
+        setTimeout(simulateNewAppointment, 3000);
+    </script>
+</body>
+</html>

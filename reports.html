@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BookEase - Reports & Analytics</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@700;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --bg-color: #f8f9fc;
+            --sidebar-bg: #ffffff;
+            --text-main: #111827;
+            --text-muted: #6b7280;
+            --border-color: #e5e7eb;
+            --primary-blue: #2563eb;
+            --primary-blue-light: #eff6ff;
+            --primary-blue-hover: #1d4ed8;
+            --success-green: #10b981;
+            --warning-orange: #f59e0b;
+            --danger-red: #ef4444;
+            --card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+            --input-border: #d1d5db;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* --- Sidebar Styles --- */
+        .sidebar {
+            width: 260px;
+            background-color: var(--sidebar-bg);
+            border-right: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            padding: 24px 0;
+            flex-shrink: 0;
+        }
+
+        /* Updated Logo Styles */
+        .logo {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 0 24px 24px 24px;
+            border-bottom: 1px solid var(--border-color);
+            margin-bottom: 16px;
+            letter-spacing: -0.5px; 
+            font-weight: 800;
+            font-size: 28px; 
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .logo img {
+            max-width: 100%;
+            max-height: 45px; /* Adjusts the height of the logo */
+            object-fit: contain;
+        }
+        
+        /* "Book" */
+        .logo-text-dark {
+            color: #13274F; 
+        }
+
+        /* "Ease" */
+        .logo-text-light {
+            color: #0D82FF;
+        }
+
+        .nav-menu {
+            list-style: none;
+            padding: 0 16px;
+            flex-grow: 1;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            margin-bottom: 4px;
+            border-radius: 8px;
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+
+        .nav-item i {
+            width: 20px;
+            text-align: center;
+            font-size: 16px;
+        }
+
+        .nav-item:hover {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+        }
+
+        .nav-item.active {
+            background-color: var(--primary-blue-light);
+            color: var(--primary-blue);
+            font-weight: 600;
+        }
+
+        .sidebar-footer {
+            padding: 24px;
+            margin-top: auto;
+        }
+
+        .tagline-label {
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+        }
+
+        .tagline-text {
+            font-size: 13px;
+            color: var(--text-muted);
+            font-style: italic;
+            line-height: 1.4;
+        }
+
+        /* --- Main Content Styles --- */
+        .main-content {
+            flex-grow: 1;
+            padding: 32px 40px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        /* Header */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 16px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .header-titles h1 {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .header-titles p {
+            font-size: 14px;
+            color: var(--text-muted);
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .user-profile img {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        /* Premium Banner */
+        .premium-banner {
+            background-color: var(--primary-blue-light);
+            border: 1px solid #bfdbfe;
+            border-radius: 12px;
+            padding: 20px 24px;
+            display: flex;
+            align-items: flex-start;
+            gap: 16px;
+        }
+
+        .premium-banner i {
+            color: var(--primary-blue);
+            font-size: 24px;
+            margin-top: 2px;
+        }
+
+        .premium-content h3 {
+            font-size: 15px;
+            font-weight: 700;
+            color: #1e3a8a;
+            margin-bottom: 4px;
+        }
+
+        .premium-content p {
+            font-size: 13px;
+            color: #3b82f6;
+            line-height: 1.5;
+        }
+
+        /* Pricing Cards */
+        .pricing-cards {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+
+        .pricing-card {
+            background-color: white;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            box-shadow: var(--card-shadow);
+        }
+
+        .pricing-card.premium {
+            border: 2px solid var(--primary-blue);
+            box-shadow: 0 10px 15px -3px rgba(37, 99, 235, 0.1);
+        }
+
+        .recommended-badge {
+            position: absolute;
+            top: -10px;
+            left: 20px;
+            background-color: var(--primary-blue);
+            color: white;
+            font-size: 10px;
+            font-weight: 700;
+            padding: 4px 10px;
+            border-radius: 20px;
+            letter-spacing: 0.5px;
+        }
+
+        .plan-name {
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .plan-price {
+            font-size: 28px;
+            font-weight: 800;
+            color: var(--text-main);
+            margin-bottom: 4px;
+        }
+
+        .plan-desc {
+            font-size: 13px;
+            color: var(--text-muted);
+            margin-bottom: 20px;
+        }
+
+        .plan-features {
+            list-style: none;
+            margin-bottom: 24px;
+            flex-grow: 1;
+        }
+
+        .plan-features li {
+            font-size: 13px;
+            color: var(--text-muted);
+            margin-bottom: 12px;
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+        }
+
+        .plan-features li i {
+            color: var(--primary-blue);
+            font-size: 14px;
+            margin-top: 2px;
+        }
+
+        .plan-btn {
+            width: 100%;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.2s;
+        }
+
+        .plan-btn-current {
+            background-color: white;
+            border: 1px solid var(--border-color);
+            color: var(--text-muted);
+            cursor: default;
+        }
+
+        .plan-btn-upgrade {
+            background-color: white;
+            border: 1px solid var(--primary-blue);
+            color: var(--primary-blue);
+        }
+
+        .plan-btn-upgrade:hover {
+            background-color: var(--primary-blue-light);
+        }
+
+        .plan-btn-premium {
+            background-color: var(--primary-blue);
+            border: none;
+            color: white;
+        }
+
+        .plan-btn-premium:hover {
+            background-color: var(--primary-blue-hover);
+        }
+
+        /* Locked Feature Placeholder */
+        .locked-feature {
+            background-color: white;
+            border-radius: 12px;
+            border: 2px dashed var(--border-color);
+            padding: 60px 20px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 300px;
+        }
+
+        .locked-feature .lock-icon {
+            font-size: 48px;
+            color: var(--text-muted);
+            margin-bottom: 20px;
+            background-color: var(--bg-color);
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .locked-feature h2 {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--text-main);
+            margin-bottom: 12px;
+        }
+
+        .locked-feature p {
+            font-size: 14px;
+            color: var(--text-muted);
+            max-width: 500px;
+            line-height: 1.6;
+            margin-bottom: 24px;
+        }
+
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .pricing-cards {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            body { flex-direction: column; overflow: auto; }
+            .sidebar { width: 100%; height: auto; border-right: none; border-bottom: 1px solid var(--border-color); }
+            .nav-menu { display: flex; overflow-x: auto; padding-bottom: 10px; }
+            .nav-item { white-space: nowrap; }
+            .main-content { padding: 20px; }
+            .header { flex-direction: column; align-items: flex-start; gap: 16px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="logo">
+            <img src="bookease_logo.png" alt="BookEase Logo" style="height: 40px;">
+            <div style="margin-left: 10px;">
+                <span class="logo-text-dark">Book</span><span class="logo-text-light">Ease</span>
+            </div>
+        </div>
+        
+        <ul class="nav-menu">
+            <li><a href="dashboard.html" class="nav-item"><i class="fa-solid fa-house"></i> Dashboard</a></li>
+            <li><a href="appointments.html" class="nav-item"><i class="fa-regular fa-calendar-check"></i> Appointments</a></li>
+            <li><a href="calendar.html" class="nav-item"><i class="fa-regular fa-calendar"></i> Calendar</a></li>
+            <li><a href="services.html" class="nav-item"><i class="fa-solid fa-list-check"></i> Services</a></li>
+            <li><a href="staff.html" class="nav-item"><i class="fa-solid fa-user-group"></i> Staff</a></li>
+            <li><a href="customers.html" class="nav-item"><i class="fa-regular fa-user"></i> Customers</a></li>
+            <li><a href="reports.html" class="nav-item active"><i class="fa-solid fa-chart-line"></i> Reports & Analytics</a></li>
+            <li><a href="business_profile.html" class="nav-item"><i class="fa-solid fa-gear"></i> Business Profile</a></li>
+        </ul>
+        <div class="sidebar-footer">
+            <div class="tagline-label">Tagline</div>
+            <div class="tagline-text">"One Platform, Customized for Your Business."</div>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        
+        <!-- Header -->
+        <header class="header">
+            <div class="header-titles">
+                <h1>Reports & Analytics</h1>
+                <p>Track booking trends, team productivity, customer conversion metrics, and unlock premium insights.</p>
+            </div>
+            <div class="header-actions">
+                <div class="user-profile">
+                    <img src="https://i.pravatar.cc/150?u=aisha" alt="Aisha Rahman">
+                    Aisha Rahman
+                </div>
+            </div>
+        </header>
+
+        <!-- Premium Banner -->
+        <section class="premium-banner">
+            <i class="fa-solid fa-star"></i>
+            <div class="premium-content">
+                <h3>Unlock Advanced Custom Analytics with BookEase Premium</h3>
+                <p>Your business is currently running on the BookEase Free/Standard framework. Upgrade today to access staff performance charts, customer retention cohorts, custom operating hour optimization, and comprehensive multi-staff calendars.</p>
+            </div>
+        </section>
+
+        <!-- Pricing Cards -->
+        <section class="pricing-cards">
+            
+            <!-- Free Plan -->
+            <div class="pricing-card">
+                <div class="plan-name">Free Plan</div>
+                <div class="plan-price">RM 0</div>
+                <div class="plan-desc">forever free</div>
+                <ul class="plan-features">
+                    <li><i class="fa-solid fa-check"></i> Up to 3 Services</li>
+                    <li><i class="fa-solid fa-check"></i> 3 staff + 60 booking per month</li>
+                    <li><i class="fa-solid fa-check"></i> basic appointment calendar</li>
+                    <li><i class="fa-solid fa-check"></i> Generic tagline setup</li>
+                </ul>
+                <button class="plan-btn plan-btn-current">Current Plan</button>
+            </div>
+
+            <!-- Standard Plan -->
+            <div class="pricing-card">
+                <div class="plan-name">Standard Plan</div>
+                <div class="plan-price">RM 79<span style="font-size: 14px; font-weight: 400; color: var(--text-muted);">/mo</span></div>
+                <div class="plan-desc">suitable for growing salons</div>
+                <ul class="plan-features">
+                    <li><i class="fa-solid fa-check"></i> Up to 100 Scheduled bookings</li>
+                    <li><i class="fa-solid fa-check"></i> Up to 10 staff</li>
+                    <li><i class="fa-solid fa-check"></i> Unlimited services</li>
+                    <li><i class="fa-solid fa-check"></i> basic reports and customer analytics</li>
+                </ul>
+                <button class="plan-btn plan-btn-upgrade">Upgrade to Standard</button>
+            </div>
+
+            <!-- Premium Plan -->
+            <div class="pricing-card premium">
+                <div class="recommended-badge">RECOMMENDED</div>
+                <div class="plan-name">Premium Plan</div>
+                <div class="plan-price">RM 129<span style="font-size: 14px; font-weight: 400; color: var(--text-muted);">/mo</span></div>
+                <div class="plan-desc">for ambitious service operations</div>
+                <ul class="plan-features">
+                    <li><i class="fa-solid fa-check"></i> Unlimited staff members and bookings</li>
+                    <li><i class="fa-solid fa-check"></i> notification features </li>
+                    <li><i class="fa-solid fa-check"></i> Live notification center</li>
+                    <li><i class="fa-solid fa-check"></i> Advanced reports and analytics</li>
+                </ul>
+                <button class="plan-btn plan-btn-premium">Upgrade to Premium</button>
+            </div>
+
+        </section>
+
+        <!-- Locked Feature Placeholder (Replaces all analytics) -->
+        <section class="locked-feature">
+            <div class="lock-icon">
+                <i class="fa-solid fa-lock"></i>
+            </div>
+            <h2>Analytics & Reports Locked</h2>
+            <p>You are currently on the <strong>Free Plan</strong>. Detailed analytics, booking trends, staff performance, and customer insights are available on the <strong>Standard</strong> and <strong>Premium</strong> plans.</p>
+            <button class="plan-btn plan-btn-premium" style="width: auto; padding: 12px 30px;">Upgrade to Unlock</button>
+        </section>
+
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Handle Pricing Plan Buttons
+            const upgradeButtons = document.querySelectorAll('.plan-btn-upgrade, .plan-btn-premium');
+            
+            upgradeButtons.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const planName = btn.closest('.pricing-card').querySelector('.plan-name').textContent;
+                    alert(`Redirecting to upgrade process for: ${planName}`);
+                    // In a real application, this would open a modal or navigate to a checkout page.
+                });
+            });
+
+            // Add click event to the "Upgrade to Unlock" button in the locked feature section
+            const unlockBtn = document.querySelector('.locked-feature .plan-btn-premium');
+            if(unlockBtn) {
+                unlockBtn.addEventListener('click', () => {
+                    // Scroll to pricing cards
+                    document.querySelector('.pricing-cards').scrollIntoView({ behavior: 'smooth' });
+                });
+            }
+        });
+    </script>
+</body>
+</html>

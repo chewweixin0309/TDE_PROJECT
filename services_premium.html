@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BookEase - Services</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@700;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --bg-color: #f8f9fc;
+            --sidebar-bg: #ffffff;
+            --text-main: #111827;
+            --text-muted: #6b7280;
+            --border-color: #e5e7eb;
+            --primary-blue: #2563eb;
+            --primary-blue-light: #eff6ff;
+            --primary-blue-hover: #1d4ed8;
+            --success-green: #10b981;
+            --success-green-light: #ecfdf5;
+            --warning-orange: #f59e0b;
+            --danger-red: #ef4444;
+            --card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+            --input-border: #d1d5db;
+            --input-focus: #2563eb;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* --- Sidebar Styles --- */
+        .sidebar {
+            width: 260px;
+            background-color: var(--sidebar-bg);
+            border-right: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            padding: 24px 0;
+            flex-shrink: 0;
+        }
+
+        /* Updated Logo Styles */
+        .logo {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 0 24px 24px 24px;
+            border-bottom: 1px solid var(--border-color);
+            margin-bottom: 16px;
+            letter-spacing: -0.5px; 
+            font-weight: 800;
+            font-size: 28px; 
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .logo img {
+            max-width: 100%;
+            max-height: 45px; /* Adjusts the height of the logo */
+            object-fit: contain;
+        }
+        
+        /* "Book" */
+        .logo-text-dark {
+            color: #13274F; 
+        }
+
+        /* "Ease" */
+        .logo-text-light {
+            color: #0D82FF;
+        }
+
+        .nav-menu {
+            list-style: none;
+            padding: 0 16px;
+            flex-grow: 1;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            margin-bottom: 4px;
+            border-radius: 8px;
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+
+        .nav-item i {
+            width: 20px;
+            text-align: center;
+            font-size: 16px;
+        }
+
+        .nav-item:hover {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+        }
+
+        .nav-item.active {
+            background-color: var(--primary-blue-light);
+            color: var(--primary-blue);
+            font-weight: 600;
+        }
+
+        .sidebar-footer {
+            padding: 24px;
+            margin-top: auto;
+        }
+
+        .tagline-label {
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+        }
+
+        .tagline-text {
+            font-size: 13px;
+            color: var(--text-muted);
+            font-style: italic;
+            line-height: 1.4;
+        }
+
+        /* --- Main Content Styles --- */
+        .main-content {
+            flex-grow: 1;
+            padding: 32px 40px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        /* Header */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 16px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .header-titles h1 {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .header-titles p {
+            font-size: 14px;
+            color: var(--text-muted);
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+        }
+
+        .location {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            background-color: var(--success-green);
+            border-radius: 50%;
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .user-profile img {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        /* Toolbar */
+        .toolbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .toolbar-left {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            flex-grow: 1;
+        }
+
+        .search-box {
+            position: relative;
+            width: 300px;
+        }
+
+        .search-box i {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 10px 12px 10px 36px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 14px;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .search-box input:focus {
+            border-color: var(--primary-blue);
+        }
+
+        .filter-select {
+            padding: 10px 16px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 14px;
+            color: var(--text-main);
+            background-color: white;
+            outline: none;
+            cursor: pointer;
+            font-weight: 500;
+            appearance: none;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%236b7280' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 10px center;
+            background-size: 14px;
+            padding-right: 36px;
+        }
+
+        .total-services {
+            font-size: 13px;
+            color: var(--text-muted);
+            font-weight: 500;
+            white-space: nowrap;
+        }
+
+        /* Layout Grid */
+        .services-layout {
+            display: grid;
+            grid-template-columns: 2.2fr 1fr;
+            gap: 24px;
+            align-items: start;
+        }
+
+        .card {
+            background-color: var(--sidebar-bg);
+            border-radius: 12px;
+            box-shadow: var(--card-shadow);
+            border: 1px solid var(--border-color);
+            padding: 24px;
+        }
+
+        /* Services List (Left Column) */
+        .card-title {
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+
+        .services-list {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .service-item {
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        .service-item:hover {
+            border-color: var(--primary-blue);
+            box-shadow: 0 2px 4px rgba(37, 99, 235, 0.05);
+        }
+
+        .service-info {
+            flex-grow: 1;
+            padding-right: 16px;
+        }
+
+        .service-category {
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--primary-blue);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 6px;
+            display: block;
+        }
+
+        .service-name {
+            font-size: 15px;
+            font-weight: 600;
+            margin-bottom: 6px;
+            color: var(--text-main);
+        }
+
+        .service-desc {
+            font-size: 12px;
+            color: var(--text-muted);
+            line-height: 1.4;
+            max-width: 90%;
+        }
+
+        .service-meta {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+            flex-shrink: 0;
+        }
+
+        .duration {
+            font-size: 12px;
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            white-space: nowrap;
+        }
+
+        .price {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--primary-blue);
+            white-space: nowrap;
+        }
+
+        .edit-btn {
+            background-color: #f3f4f6;
+            border: none;
+            width: 32px;
+            height: 32px;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: background-color 0.2s, color 0.2s;
+            margin-left: 12px;
+        }
+
+        .edit-btn:hover {
+            background-color: #e5e7eb;
+            color: var(--text-main);
+        }
+
+        /* Add Service Form (Right Column) */
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-muted);
+            margin-bottom: 8px;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid var(--input-border);
+            border-radius: 8px;
+            font-size: 14px;
+            color: var(--text-main);
+            outline: none;
+            transition: border-color 0.2s;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            border-color: var(--input-focus);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        .form-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+            margin-top: 24px;
+            padding-top: 16px;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .btn-reset {
+            padding: 10px 20px;
+            background-color: white;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .btn-reset:hover {
+            background-color: #f9fafb;
+        }
+
+        .btn-save {
+            padding: 10px 20px;
+            background-color: var(--primary-blue);
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .btn-save:hover {
+            background-color: var(--primary-blue-hover);
+        }
+
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .services-layout {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            body { flex-direction: column; overflow: auto; }
+            .sidebar { width: 100%; height: auto; border-right: none; border-bottom: 1px solid var(--border-color); }
+            .nav-menu { display: flex; overflow-x: auto; padding-bottom: 10px; }
+            .nav-item { white-space: nowrap; }
+            .main-content { padding: 20px; }
+            .toolbar { flex-direction: column; align-items: stretch; }
+            .toolbar-left { flex-direction: column; align-items: stretch; }
+            .search-box { width: 100%; }
+            .header { flex-direction: column; align-items: flex-start; gap: 16px; }
+            .service-item { flex-direction: column; gap: 12px; }
+            .service-meta { width: 100%; justify-content: space-between; }
+            .form-row { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="logo">
+            <img src="bookease_logo.png" alt="BookEase Logo" style="height: 40px;">
+            <div style="margin-left: 10px;">
+                <span class="logo-text-dark">Book</span><span class="logo-text-light">Ease</span>
+            </div>
+        </div>
+        
+        <ul class="nav-menu">
+            <li><a href="dashboard.html" class="nav-item"><i class="fa-solid fa-house"></i> Dashboard</a></li>
+            <li><a href="appointments.html" class="nav-item"><i class="fa-regular fa-calendar-check"></i> Appointments</a></li>
+            <li><a href="calendar.html" class="nav-item"><i class="fa-regular fa-calendar"></i> Calendar</a></li>
+            <li><a href="services.html" class="nav-item active"><i class="fa-solid fa-list-check"></i> Services</a></li>
+            <li><a href="staff.html" class="nav-item"><i class="fa-solid fa-user-group"></i> Staff</a></li>
+            <li><a href="customers.html" class="nav-item"><i class="fa-regular fa-user"></i> Customers</a></li>
+            <li><a href="reports.html" class="nav-item"><i class="fa-solid fa-chart-line"></i> Reports & Analytics</a></li>
+            <li><a href="business_profile.html" class="nav-item"><i class="fa-solid fa-gear"></i> Business Profile</a></li>
+        </ul>
+        <div class="sidebar-footer">
+            <div class="tagline-label">Tagline</div>
+            <div class="tagline-text">"One Platform, Customized for Your Business."</div>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        
+        <!-- Header -->
+        <header class="header">
+            <div class="header-titles">
+                <h1>Services</h1>
+                <p>Manage your service items, pricing, durations and configurations.</p>
+            </div>
+            <div class="header-actions">
+                <div class="user-profile">
+                    <img src="https://i.pravatar.cc/150?u=aisha" alt="Aisha Rahman">
+                    Aisha Rahman
+                </div>
+            </div>
+        </header>
+
+        <!-- Toolbar -->
+        <section class="toolbar">
+            <div class="toolbar-left">
+                <div class="search-box">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <input type="text" placeholder="Search Service Name...">
+                </div>
+                <select class="filter-select">
+                    <option value="all">Category: All</option>
+                    <option value="hair">Hair Styling</option>
+                    <option value="skincare">Skincare</option>
+                    <option value="treatments">Treatments</option>
+                </select>
+            </div>
+            <div class="total-services">Total Active Services: 12</div>
+        </section>
+
+        <!-- Services Layout -->
+        <section class="services-layout">
+            
+            <!-- Left Column: Active Services Catalog -->
+            <div class="card">
+                <h2 class="card-title">Active Services Catalog</h2>
+                <div class="services-list">
+                    
+                    <!-- Service Item 1 -->
+                    <div class="service-item">
+                        <div class="service-info">
+                            <span class="service-category">HAIR STYLING</span>
+                            <h3 class="service-name">Signature Haircut + Wash</h3>
+                            <p class="service-desc">Consultation, detailed cut, shampoo wash and full blow dry styling</p>
+                        </div>
+                        <div class="service-meta">
+                            <span class="duration"><i class="fa-regular fa-clock"></i> 45 mins</span>
+                            <span class="price">RM 85.00</span>
+                            <button class="edit-btn"><i class="fa-solid fa-pen-to-square"></i></button>
+                        </div>
+                    </div>
+
+                    <!-- Service Item 2 -->
+                    <div class="service-item">
+                        <div class="service-info">
+                            <span class="service-category">SKINCARE</span>
+                            <h3 class="service-name">Deep Cleansing Facial</h3>
+                            <p class="service-desc">Organic fruit-acid chemical peel, safe extraction and cooling clay mask</p>
+                        </div>
+                        <div class="service-meta">
+                            <span class="duration"><i class="fa-regular fa-clock"></i> 60 mins</span>
+                            <span class="price">RM 180.00</span>
+                            <button class="edit-btn"><i class="fa-solid fa-pen-to-square"></i></button>
+                        </div>
+                    </div>
+
+                    <!-- Service Item 3 -->
+                    <div class="service-item">
+                        <div class="service-info">
+                            <span class="service-category">HAIR STYLING</span>
+                            <h3 class="service-name">Korean Perm & Wave</h3>
+                            <p class="service-desc">Volumizing root perm using premium low-damage Korean chemicals</p>
+                        </div>
+                        <div class="service-meta">
+                            <span class="duration"><i class="fa-regular fa-clock"></i> 120 mins</span>
+                            <span class="price">RM 320.00</span>
+                            <button class="edit-btn"><i class="fa-solid fa-pen-to-square"></i></button>
+                        </div>
+                    </div>
+
+                    <!-- Service Item 4 -->
+                    <div class="service-item">
+                        <div class="service-info">
+                            <span class="service-category">HAIR STYLING</span>
+                            <h3 class="service-name">Gentle Organic Dye</h3>
+                            <p class="service-desc">Ammonia-free structural grey hair coverage made with chamomile extracts</p>
+                        </div>
+                        <div class="service-meta">
+                            <span class="duration"><i class="fa-regular fa-clock"></i> 90 mins</span>
+                            <span class="price">RM 240.00</span>
+                            <button class="edit-btn"><i class="fa-solid fa-pen-to-square"></i></button>
+                        </div>
+                    </div>
+
+                    <!-- Service Item 5 -->
+                    <div class="service-item">
+                        <div class="service-info">
+                            <span class="service-category">TREATMENTS</span>
+                            <h3 class="service-name">Scalp Therapy Session</h3>
+                            <p class="service-desc">Laser follicular therapy, scalp massage and intensive tea tree mask</p>
+                        </div>
+                        <div class="service-meta">
+                            <span class="duration"><i class="fa-regular fa-clock"></i> 45 mins</span>
+                            <span class="price">RM 150.00</span>
+                            <button class="edit-btn"><i class="fa-solid fa-pen-to-square"></i></button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- Right Column: Add New Service Form -->
+            <div class="card">
+                <h2 class="card-title">Add New Service</h2>
+                <form class="add-service-form" onsubmit="event.preventDefault(); alert('Service saved!');">
+                    
+                    <div class="form-group">
+                        <label>Service Name</label>
+                        <input type="text" placeholder="e.g. Therapeutic Head Massage">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Description</label>
+                        <textarea placeholder="Provide deep explanation of treatment process..."></textarea>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Category</label>
+                            <select>
+                                <option value="hair">Hair Styling</option>
+                                <option value="skincare">Skincare</option>
+                                <option value="treatments">Treatments</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Duration (Mins)</label>
+                            <input type="number" value="45">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Price (RM)</label>
+                        <input type="text" value="95.00">
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="button" class="btn-reset">Reset</button>
+                        <button type="submit" class="btn-save">Save Service</button>
+                    </div>
+
+                </form>
+            </div>
+
+        </section>
+
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Handle Edit Button Clicks
+            const editBtns = document.querySelectorAll('.edit-btn');
+            editBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    // Find the parent service item to extract data (mock functionality)
+                    const serviceItem = btn.closest('.service-item');
+                    const serviceName = serviceItem.querySelector('.service-name').textContent;
+                    alert(`Editing service: ${serviceName}`);
+                    
+                    // In a real app, this would populate the right-hand form with the data
+                });
+            });
+
+            // Handle Reset Button in Form
+            const resetBtn = document.querySelector('.btn-reset');
+            if(resetBtn) {
+                resetBtn.addEventListener('click', () => {
+                    // Clear all inputs in the form
+                    const form = document.querySelector('.add-service-form');
+                    form.reset();
+                });
+            }
+        });
+    </script>
+</body>
+</html>
